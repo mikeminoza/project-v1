@@ -1,11 +1,11 @@
-import { CTABanner } from '@/components/cta-banner'
-import { FAQ } from '@/components/faq'
-import { Features } from '@/components/features'
-import { Footer } from '@/components/footer'
-import { Hero } from '@/components/hero'
-import { HowItWorks } from '@/components/how-it-works'
-import { Navbar } from '@/components/navbar'
-import { Pricing } from '@/components/pricing'
+import { CTABanner } from '@/components/landing/cta-banner'
+import { FAQ } from '@/components/landing/faq'
+import { Features } from '@/components/landing/features'
+import { Hero } from '@/components/landing/hero'
+import { HowItWorks } from '@/components/landing/how-it-works'
+import { Pricing } from '@/components/landing/pricing'
+import { Footer } from '@/components/layout/footer'
+import { Navbar } from '@/components/layout/navbar'
 
 export default function Home() {
   return (
