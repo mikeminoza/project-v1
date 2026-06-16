@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import { Logo } from '@/components/ui/logo'
 
 export function Footer() {
   return (
@@ -6,9 +6,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="flex flex-col gap-4">
-            <Link href="/" className="text-lg font-bold">
-              Pay<span className="text-brand">Nudge</span>
-            </Link>
+            <Logo size={24} />
             <p className="text-muted-foreground max-w-xs text-sm">
               Automated invoice reminders that get results — without the awkward
               conversations.
@@ -71,7 +69,7 @@ export function Footer() {
           </div>
         </div>
         <div className="text-muted-foreground mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 text-sm sm:flex-row">
-          <p>© 2026 PayNudge. All rights reserved.</p>
+          <p>© 2026 Invoq. All rights reserved.</p>
           <p>Built for freelancers, by freelancers.</p>
         </div>
       </div>

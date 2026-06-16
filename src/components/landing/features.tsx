@@ -1,4 +1,4 @@
-import {
+﻿import {
   Bell,
   TrendingUp,
   Users,
@@ -12,7 +12,7 @@ const features = [
     icon: Bell,
     title: 'Automated Reminders',
     description:
-      'Set it once and PayNudge sends perfectly-timed reminders for every invoice — no manual follow-up needed.',
+      'Set it once and Invoq sends perfectly-timed reminders for every invoice — no manual follow-up needed.',
   },
   {
     icon: TrendingUp,
@@ -58,8 +58,8 @@ export function Features() {
             Everything you need to get paid faster
           </h2>
           <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-lg">
-            PayNudge handles the entire follow-up process so you can focus on
-            your actual work.
+            Invoq handles the entire follow-up process so you can focus on your
+            actual work.
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

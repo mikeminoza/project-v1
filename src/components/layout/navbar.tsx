@@ -1,12 +1,10 @@
-import Link from 'next/link'
+﻿import { Logo } from '@/components/ui/logo'
 
 export function Navbar() {
   return (
     <header className="bg-background/80 fixed top-0 z-50 w-full border-b border-white/5 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          Pay<span className="text-brand">Nudge</span>
-        </Link>
+        <Logo size={28} />
         <nav className="hidden items-center gap-8 md:flex">
           <a
             href="#features"

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { DM_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 
@@ -15,7 +15,7 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'PayNudge — Stop Chasing Payments',
+  title: 'Invoq — Stop Chasing Payments',
   description:
     'Automated invoice reminders that get results. Stop chasing clients and start getting paid faster.',
 }

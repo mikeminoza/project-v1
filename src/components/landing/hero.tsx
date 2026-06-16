@@ -1,4 +1,4 @@
-import { AlertCircle, ArrowRight, CheckCircle, Clock } from 'lucide-react'
+﻿import { AlertCircle, ArrowRight, CheckCircle, Clock } from 'lucide-react'
 
 export function Hero() {
   return (
@@ -19,9 +19,8 @@ export function Hero() {
               <span className="text-brand">Start getting paid.</span>
             </h1>
             <p className="text-muted-foreground max-w-md text-lg leading-relaxed">
-              PayNudge sends automated invoice reminders so you never have to
-              write another awkward follow-up email. Polite first, firm when
-              needed.
+              Invoq sends automated invoice reminders so you never have to write
+              another awkward follow-up email. Polite first, firm when needed.
             </p>
             <div className="flex flex-wrap gap-4">
               <a

@@ -1,23 +1,23 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { Minus, Plus } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'How does PayNudge work?',
+    question: 'How does Invoq work?',
     answer:
-      'You add your invoices (or import them from your invoicing tool), set a reminder schedule, and PayNudge sends automated follow-up emails on your behalf. You stay in full control — you can preview, pause, or customize any reminder at any time.',
+      'You add your invoices (or import them from your invoicing tool), set a reminder schedule, and Invoq sends automated follow-up emails on your behalf. You stay in full control — you can preview, pause, or customize any reminder at any time.',
   },
   {
     question: 'Will my clients know the reminders are automated?',
     answer:
-      "No — unless you tell them. PayNudge reminders look like regular emails from you, sent from your own email address. They are personalized with the client's name, invoice details, and your tone.",
+      "No — unless you tell them. Invoq reminders look like regular emails from you, sent from your own email address. They are personalized with the client's name, invoice details, and your tone.",
   },
   {
     question: "What if a client still doesn't pay?",
     answer:
-      'PayNudge escalates automatically — starting polite and getting firmer over time. For truly unresponsive clients, we provide a final-notice template and a clear record of all communications you can use if you need to take further action.',
+      'Invoq escalates automatically — starting polite and getting firmer over time. For truly unresponsive clients, we provide a final-notice template and a clear record of all communications you can use if you need to take further action.',
   },
   {
     question: 'Can I customize the reminder messages?',
@@ -25,9 +25,9 @@ const faqs = [
       'Absolutely. You can customize every template, use your own subject lines, and create different sequences for different client types. Your voice, automated.',
   },
   {
-    question: 'Does PayNudge integrate with my invoicing tool?',
+    question: 'Does Invoq integrate with my invoicing tool?',
     answer:
-      'Yes. PayNudge integrates with FreshBooks, QuickBooks, Wave, HoneyBook, Bonsai, and more. You can also import invoices manually via CSV or add them directly in PayNudge.',
+      'Yes. Invoq integrates with FreshBooks, QuickBooks, Wave, HoneyBook, Bonsai, and more. You can also import invoices manually via CSV or add them directly in Invoq.',
   },
   {
     question: 'Can I cancel anytime?',

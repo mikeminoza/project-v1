@@ -1,15 +1,15 @@
-const steps = [
+﻿const steps = [
   {
     number: '01',
     title: 'Add your invoice',
     description:
-      'Import from your invoicing tool or add manually. PayNudge works with FreshBooks, QuickBooks, Wave, and more.',
+      'Import from your invoicing tool or add manually. Invoq works with FreshBooks, QuickBooks, Wave, and more.',
   },
   {
     number: '02',
     title: 'Set your reminder schedule',
     description:
-      'Choose when and how often to remind. Use our proven templates or write your own — PayNudge handles the rest.',
+      'Choose when and how often to remind. Use our proven templates or write your own — Invoq handles the rest.',
   },
   {
     number: '03',
