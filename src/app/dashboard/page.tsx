@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { AlertCircle, DollarSign, FileText, Plus, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { clientsDb, invoicesDb } from '@/lib/db'
 import { getAvatar } from '@/lib/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import { StatCard } from '@/components/dashboard/stat-card'
@@ -17,26 +18,12 @@ function formatCurrency(amount: number) {
 export default async function DashboardPage() {
   const supabase = await createClient()
 
-  const [{ data: invoices }, { data: clients }] = await Promise.all([
-    supabase.from('invoices').select('status, amount'),
-    supabase
-      .from('clients')
-      .select('id, name, email, company')
-      .order('created_at', { ascending: false })
-      .limit(5),
+  const [stats, recentClients] = await Promise.all([
+    invoicesDb.getStats(supabase),
+    clientsDb.getRecent(supabase),
   ])
 
-  const allInvoices = invoices ?? []
-  const recentClients = clients ?? []
-
-  const totalInvoices = allInvoices.length
-  const outstanding = allInvoices
-    .filter((inv) => inv.status === 'pending')
-    .reduce((sum, inv) => sum + Number(inv.amount), 0)
-  const paid = allInvoices
-    .filter((inv) => inv.status === 'paid')
-    .reduce((sum, inv) => sum + Number(inv.amount), 0)
-  const overdue = allInvoices.filter((inv) => inv.status === 'overdue').length
+  const { total: totalInvoices, outstanding, paid, overdue } = stats
 
   return (
     <div className="p-6 lg:p-8">

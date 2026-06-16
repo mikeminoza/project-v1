@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { clientsDb } from '@/lib/db'
 
 export function useDeleteClient(onSuccess?: () => void) {
   const router = useRouter()
@@ -13,24 +14,22 @@ export function useDeleteClient(onSuccess?: () => void) {
     setIsLoading(true)
     setServerError(null)
 
-    const supabase = createClient()
-    const { error } = await supabase.from('clients').delete().eq('id', id)
-
-    setIsLoading(false)
-
-    if (error) {
-      if (error.message.includes('foreign key')) {
-        setServerError(
-          'This client has invoices and cannot be deleted. Remove their invoices first.',
-        )
-      } else {
-        setServerError(error.message)
-      }
-      return
+    try {
+      const supabase = createClient()
+      await clientsDb.remove(supabase, id)
+      router.refresh()
+      onSuccess?.()
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Something went wrong'
+      setServerError(
+        message.includes('foreign key')
+          ? 'This client has invoices and cannot be deleted. Remove their invoices first.'
+          : message,
+      )
+    } finally {
+      setIsLoading(false)
     }
-
-    router.refresh()
-    onSuccess?.()
   }
 
   return { deleteClient, isLoading, serverError }

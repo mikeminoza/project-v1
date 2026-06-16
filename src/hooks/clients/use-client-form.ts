@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createClient as createSupabaseClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
+import { clientsDb } from '@/lib/db'
 import { clientSchema, type ClientValues } from '@/lib/validations/client'
 import type { Client } from '@/types'
 
@@ -36,8 +37,7 @@ export function useClientForm({
     setIsLoading(true)
     setServerError(null)
 
-    const supabase = createSupabaseClient()
-
+    const supabase = createClient()
     const payload = {
       name: data.name,
       email: data.email,
@@ -46,36 +46,25 @@ export function useClientForm({
       address: data.address || null,
     }
 
-    let error
-
-    if (client) {
-      ;({ error } = await supabase
-        .from('clients')
-        .update(payload)
-        .eq('id', client.id))
-    } else {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) {
-        setServerError('Not authenticated')
-        setIsLoading(false)
-        return
+    try {
+      if (client) {
+        await clientsDb.update(supabase, client.id, payload)
+      } else {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        if (!user) throw new Error('Not authenticated')
+        await clientsDb.create(supabase, user.id, payload)
       }
-      ;({ error } = await supabase
-        .from('clients')
-        .insert({ ...payload, user_id: user.id }))
+      router.refresh()
+      onSuccess?.()
+    } catch (err) {
+      setServerError(
+        err instanceof Error ? err.message : 'Something went wrong',
+      )
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
-
-    if (error) {
-      setServerError(error.message)
-      return
-    }
-
-    router.refresh()
-    onSuccess?.()
   }
 
   return { form, onSubmit, isLoading, serverError }
