@@ -11,6 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 const navLinks = [
   { href: '#features', label: 'Features' },
@@ -42,6 +43,7 @@ export function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           <Link
             href="/sign-in"
             className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
@@ -56,46 +58,52 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile menu — Base UI uses render prop, not asChild */}
-        <Sheet>
-          <SheetTrigger
-            className="md:hidden"
-            render={<Button variant="ghost" size="icon" />}
-          >
-            <Menu className="h-5 w-5" />
-          </SheetTrigger>
-          <SheetContent side="right" className="flex w-72 flex-col px-6 py-6">
-            <SheetTitle className="sr-only">Navigation</SheetTitle>
-            <Logo size={24} />
+        {/* Mobile actions */}
+        <div className="flex items-center md:hidden">
+          <ThemeToggle />
 
-            <nav className="mt-8 flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-md px-3 py-2.5 text-sm font-medium transition-colors"
+          {/* Mobile menu — Base UI uses render prop, not asChild */}
+          <Sheet>
+            <SheetTrigger render={<Button variant="ghost" size="icon" />}>
+              <Menu className="h-5 w-5" />
+            </SheetTrigger>
+            <SheetContent side="right" className="flex w-72 flex-col px-6 py-6">
+              <SheetTitle className="sr-only">Navigation</SheetTitle>
+              <Logo size={24} />
+
+              <nav className="mt-8 flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-md px-3 py-2.5 text-sm font-medium transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </nav>
+
+              <div className="mt-auto flex flex-col gap-2 border-t border-white/5 pt-6">
+                <div className="flex items-center justify-between pb-1">
+                  <span className="text-muted-foreground text-sm">Theme</span>
+                  <ThemeToggle />
+                </div>
+                <Link
+                  href="/sign-in"
+                  className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
                 >
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-
-            <div className="mt-auto flex flex-col gap-2 border-t border-white/5 pt-6">
-              <Link
-                href="/sign-in"
-                className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/sign-up"
-                className={cn(buttonVariants(), 'w-full rounded-full')}
-              >
-                Get started free
-              </Link>
-            </div>
-          </SheetContent>
-        </Sheet>
+                  Sign in
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className={cn(buttonVariants(), 'w-full rounded-full')}
+                >
+                  Get started free
+                </Link>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   )

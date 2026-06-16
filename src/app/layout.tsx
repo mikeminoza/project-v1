@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from 'next'
 import { DM_Mono, Plus_Jakarta_Sans } from 'next/font/google'
+import { ThemeProvider } from '@/components/ui/theme-provider'
 import './globals.css'
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -28,9 +29,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable} ${dmMono.variable} dark h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${dmMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
