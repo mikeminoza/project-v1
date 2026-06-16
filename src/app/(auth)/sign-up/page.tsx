@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
@@ -9,46 +7,22 @@ import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { GoogleIcon } from '@/components/auth/google-icon'
-import { createClient } from '@/lib/supabase/client'
+import { useSignUp } from '@/hooks/use-sign-up'
 
 export default function SignUpPage() {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setIsLoading(true)
-
-    const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: name } },
-    })
-
-    if (error) {
-      setError(error.message)
-      setIsLoading(false)
-      return
-    }
-
-    router.push(`/verify-email?email=${encodeURIComponent(email)}`)
-  }
-
-  async function handleGoogle() {
-    const supabase = createClient()
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    })
-  }
+  const {
+    form,
+    onSubmit,
+    isLoading,
+    serverError,
+    showPassword,
+    togglePassword,
+  } = useSignUp()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
     <FadeIn className="w-full max-w-sm">
@@ -65,25 +39,7 @@ export default function SignUpPage() {
         </p>
       </div>
 
-      <Button
-        variant="outline"
-        className="w-full gap-2"
-        type="button"
-        onClick={handleGoogle}
-      >
-        <GoogleIcon />
-        Continue with Google
-      </Button>
-
-      <div className="my-6 flex items-center gap-3">
-        <div className="bg-border h-px flex-1" />
-        <span className="text-muted-foreground text-xs">
-          or continue with email
-        </span>
-        <div className="bg-border h-px flex-1" />
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="name">Full name</Label>
           <Input
@@ -91,10 +47,11 @@ export default function SignUpPage() {
             type="text"
             placeholder="Alex Johnson"
             autoComplete="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+            {...register('name')}
           />
+          {errors.name && (
+            <p className="text-destructive text-xs">{errors.name.message}</p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -104,10 +61,11 @@ export default function SignUpPage() {
             type="email"
             placeholder="alex@studio.com"
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            {...register('email')}
           />
+          {errors.email && (
+            <p className="text-destructive text-xs">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -119,14 +77,11 @@ export default function SignUpPage() {
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               className="pr-10"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
+              {...register('password')}
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={togglePassword}
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
@@ -137,9 +92,16 @@ export default function SignUpPage() {
               )}
             </button>
           </div>
+          {errors.password && (
+            <p className="text-destructive text-xs">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
-        {error && <p className="text-destructive text-sm">{error}</p>}
+        {serverError && (
+          <p className="text-destructive text-sm">{serverError}</p>
+        )}
 
         <Button
           type="submit"

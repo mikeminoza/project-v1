@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
@@ -9,39 +7,24 @@ import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createClient } from '@/lib/supabase/client'
+import { useResetPassword } from '@/hooks/use-reset-password'
 
 export default function ResetPasswordPage() {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-
-    if (password !== confirm) {
-      setError('Passwords do not match.')
-      return
-    }
-
-    setIsLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.updateUser({ password })
-
-    if (error) {
-      setError(error.message)
-      setIsLoading(false)
-      return
-    }
-
-    router.push('/dashboard')
-    router.refresh()
-  }
+  const {
+    form,
+    onSubmit,
+    isLoading,
+    serverError,
+    showPassword,
+    showConfirm,
+    togglePassword,
+    toggleConfirm,
+  } = useResetPassword()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
     <FadeIn className="w-full max-w-sm">
@@ -58,7 +41,7 @@ export default function ResetPasswordPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="password">New password</Label>
           <div className="relative">
@@ -68,14 +51,11 @@ export default function ResetPasswordPage() {
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               className="pr-10"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
+              {...register('password')}
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={togglePassword}
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
@@ -86,6 +66,11 @@ export default function ResetPasswordPage() {
               )}
             </button>
           </div>
+          {errors.password && (
+            <p className="text-destructive text-xs">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -97,13 +82,11 @@ export default function ResetPasswordPage() {
               placeholder="Repeat your password"
               autoComplete="new-password"
               className="pr-10"
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              required
+              {...register('confirm')}
             />
             <button
               type="button"
-              onClick={() => setShowConfirm(!showConfirm)}
+              onClick={toggleConfirm}
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
               aria-label={showConfirm ? 'Hide password' : 'Show password'}
             >
@@ -114,9 +97,14 @@ export default function ResetPasswordPage() {
               )}
             </button>
           </div>
+          {errors.confirm && (
+            <p className="text-destructive text-xs">{errors.confirm.message}</p>
+          )}
         </div>
 
-        {error && <p className="text-destructive text-sm">{error}</p>}
+        {serverError && (
+          <p className="text-destructive text-sm">{serverError}</p>
+        )}
 
         <Button
           type="submit"

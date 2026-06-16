@@ -1,27 +1,15 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import { ArrowLeft, MailCheck } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
 import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/lib/supabase/client'
+import { useVerifyEmail } from '@/hooks/use-verify-email'
 
 function VerifyEmailContent() {
-  const searchParams = useSearchParams()
-  const email = searchParams.get('email') ?? ''
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
-    'idle',
-  )
-
-  async function handleResend() {
-    setStatus('sending')
-    const supabase = createClient()
-    const { error } = await supabase.auth.resend({ type: 'signup', email })
-    setStatus(error ? 'error' : 'sent')
-  }
+  const { email, status, resend } = useVerifyEmail()
 
   return (
     <FadeIn className="w-full max-w-sm text-center">
@@ -56,7 +44,7 @@ function VerifyEmailContent() {
         <Button
           variant="outline"
           className="w-full"
-          onClick={handleResend}
+          onClick={resend}
           disabled={status === 'sending'}
         >
           {status === 'sending' ? 'Sending…' : 'Resend verification email'}

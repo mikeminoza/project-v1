@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
@@ -8,33 +7,16 @@ import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createClient } from '@/lib/supabase/client'
+import { useForgotPassword } from '@/hooks/use-forgot-password'
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setIsLoading(true)
-
-    const supabase = createClient()
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
-    })
-
-    if (error) {
-      setError(error.message)
-      setIsLoading(false)
-      return
-    }
-
-    setSuccess(true)
-    setIsLoading(false)
-  }
+  const { form, onSubmit, isLoading, serverError, sentEmail } =
+    useForgotPassword()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
     <FadeIn className="w-full max-w-sm">
@@ -42,7 +24,7 @@ export default function ForgotPasswordPage() {
         <Logo size={28} />
       </div>
 
-      {success ? (
+      {sentEmail ? (
         <div className="text-center">
           <div className="mb-6 flex justify-center">
             <div className="bg-brand/10 flex h-16 w-16 items-center justify-center rounded-full">
@@ -54,8 +36,8 @@ export default function ForgotPasswordPage() {
           </h1>
           <p className="text-muted-foreground mb-8 text-sm leading-relaxed">
             We sent a reset link to{' '}
-            <strong className="text-foreground">{email}</strong>. Click it to
-            set a new password.
+            <strong className="text-foreground">{sentEmail}</strong>. Click it
+            to set a new password.
           </p>
           <Link
             href="/sign-in"
@@ -76,7 +58,7 @@ export default function ForgotPasswordPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -84,13 +66,18 @@ export default function ForgotPasswordPage() {
                 type="email"
                 placeholder="alex@studio.com"
                 autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                {...register('email')}
               />
+              {errors.email && (
+                <p className="text-destructive text-xs">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
-            {error && <p className="text-destructive text-sm">{error}</p>}
+            {serverError && (
+              <p className="text-destructive text-sm">{serverError}</p>
+            )}
 
             <Button
               type="submit"
