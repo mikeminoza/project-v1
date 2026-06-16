@@ -1,4 +1,5 @@
 ﻿import { AlertCircle, ArrowRight, CheckCircle, Clock } from 'lucide-react'
+import { FadeIn } from '@/components/ui/motion'
 
 export function Hero() {
   return (
@@ -9,51 +10,62 @@ export function Hero() {
       <div className="relative mx-auto w-full max-w-6xl">
         <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-8">
           <div className="flex flex-col gap-8">
-            <div className="border-brand/20 bg-brand/10 text-brand inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm">
-              <span className="bg-brand h-1.5 w-1.5 animate-pulse rounded-full" />
-              No more awkward payment conversations
-            </div>
-            <h1 className="text-foreground text-5xl leading-[1.05] font-bold tracking-tight lg:text-6xl">
-              Stop chasing.
-              <br />
-              <span className="text-brand">Start getting paid.</span>
-            </h1>
-            <p className="text-muted-foreground max-w-md text-lg leading-relaxed">
-              Invoq sends automated invoice reminders so you never have to write
-              another awkward follow-up email. Polite first, firm when needed.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <a
-                href="#"
-                className="bg-brand text-brand-foreground inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
-              >
-                Start for free
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#how-it-works"
-                className="border-border text-foreground hover:bg-muted inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-colors"
-              >
-                See how it works
-              </a>
-            </div>
-            <div className="text-muted-foreground flex flex-wrap items-center gap-6 text-sm">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle className="text-brand h-4 w-4" />
-                Free forever plan
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle className="text-brand h-4 w-4" />
-                No credit card needed
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle className="text-brand h-4 w-4" />
-                Setup in 2 minutes
-              </span>
-            </div>
+            <FadeIn delay={0}>
+              <div className="border-brand/20 bg-brand/10 text-brand inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm">
+                <span className="bg-brand h-1.5 w-1.5 animate-pulse rounded-full" />
+                No more awkward payment conversations
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <h1 className="text-foreground text-5xl leading-[1.05] font-bold tracking-tight lg:text-6xl">
+                Stop chasing.
+                <br />
+                <span className="text-brand">Start getting paid.</span>
+              </h1>
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <p className="text-muted-foreground max-w-md text-lg leading-relaxed">
+                Invoq sends automated invoice reminders so you never have to
+                write another awkward follow-up email. Polite first, firm when
+                needed.
+              </p>
+            </FadeIn>
+            <FadeIn delay={0.3}>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="#"
+                  className="bg-brand text-brand-foreground inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                >
+                  Start for free
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <a
+                  href="#how-it-works"
+                  className="border-border text-foreground hover:bg-muted inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-colors"
+                >
+                  See how it works
+                </a>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.4}>
+              <div className="text-muted-foreground flex flex-wrap items-center gap-6 text-sm">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="text-brand h-4 w-4" />
+                  Free forever plan
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="text-brand h-4 w-4" />
+                  No credit card needed
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="text-brand h-4 w-4" />
+                  Setup in 2 minutes
+                </span>
+              </div>
+            </FadeIn>
           </div>
 
-          <div className="relative">
+          <FadeIn delay={0.25} className="relative">
             <div className="bg-card rounded-2xl border border-white/10 p-6 shadow-2xl">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-foreground font-semibold">
@@ -137,7 +149,7 @@ export function Hero() {
                 </p>
               </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </section>

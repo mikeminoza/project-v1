@@ -1,4 +1,5 @@
 import { CheckCircle } from 'lucide-react'
+import { FadeUp, Stagger, StaggerItem } from '@/components/ui/motion'
 
 const plans = [
   {
@@ -56,7 +57,7 @@ export function Pricing() {
   return (
     <section id="pricing" className="px-6 py-24">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-16 text-center">
+        <FadeUp className="mb-16 text-center">
           <p className="text-brand mb-3 text-sm font-medium tracking-wider uppercase">
             Pricing
           </p>
@@ -66,64 +67,65 @@ export function Pricing() {
           <p className="text-muted-foreground mt-4 text-lg">
             Start free. Upgrade when you are ready.
           </p>
-        </div>
-        <div className="grid gap-6 lg:grid-cols-3">
+        </FadeUp>
+        <Stagger className="grid gap-6 lg:grid-cols-3">
           {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative flex flex-col rounded-2xl border p-8 ${
-                plan.highlight
-                  ? 'border-brand bg-brand/5'
-                  : 'bg-card border-white/5'
-              }`}
-            >
-              {plan.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-brand text-brand-foreground rounded-full px-4 py-1 text-xs font-semibold">
-                    Most popular
-                  </span>
-                </div>
-              )}
-              <div className="mb-8">
-                <h3 className="text-foreground text-lg font-semibold">
-                  {plan.name}
-                </h3>
-                <div className="mt-3 flex items-baseline gap-1">
-                  <span className="text-foreground text-4xl font-bold">
-                    {plan.price}
-                  </span>
-                  <span className="text-muted-foreground text-sm">
-                    /{plan.period}
-                  </span>
-                </div>
-                <p className="text-muted-foreground mt-2 text-sm">
-                  {plan.description}
-                </p>
-              </div>
-              <ul className="mb-8 flex-1 space-y-3">
-                {plan.features.map((feature) => (
-                  <li
-                    key={feature}
-                    className="text-muted-foreground flex items-center gap-3 text-sm"
-                  >
-                    <CheckCircle className="text-brand h-4 w-4 shrink-0" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#"
-                className={`block rounded-full py-3 text-center text-sm font-semibold transition-opacity hover:opacity-90 ${
+            <StaggerItem key={plan.name}>
+              <div
+                className={`relative flex h-full flex-col rounded-2xl border p-8 ${
                   plan.highlight
-                    ? 'bg-brand text-brand-foreground'
-                    : 'bg-foreground text-background'
+                    ? 'border-brand bg-brand/5'
+                    : 'bg-card border-white/5'
                 }`}
               >
-                {plan.cta}
-              </a>
-            </div>
+                {plan.highlight && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-brand text-brand-foreground rounded-full px-4 py-1 text-xs font-semibold">
+                      Most popular
+                    </span>
+                  </div>
+                )}
+                <div className="mb-8">
+                  <h3 className="text-foreground text-lg font-semibold">
+                    {plan.name}
+                  </h3>
+                  <div className="mt-3 flex items-baseline gap-1">
+                    <span className="text-foreground text-4xl font-bold">
+                      {plan.price}
+                    </span>
+                    <span className="text-muted-foreground text-sm">
+                      /{plan.period}
+                    </span>
+                  </div>
+                  <p className="text-muted-foreground mt-2 text-sm">
+                    {plan.description}
+                  </p>
+                </div>
+                <ul className="mb-8 flex-1 space-y-3">
+                  {plan.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="text-muted-foreground flex items-center gap-3 text-sm"
+                    >
+                      <CheckCircle className="text-brand h-4 w-4 shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="#"
+                  className={`block rounded-full py-3 text-center text-sm font-semibold transition-opacity hover:opacity-90 ${
+                    plan.highlight
+                      ? 'bg-brand text-brand-foreground'
+                      : 'bg-foreground text-background'
+                  }`}
+                >
+                  {plan.cta}
+                </a>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )

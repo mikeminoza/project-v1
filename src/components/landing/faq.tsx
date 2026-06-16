@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Minus, Plus } from 'lucide-react'
+import { FadeUp } from '@/components/ui/motion'
 
 const faqs = [
   {
@@ -42,14 +43,14 @@ export function FAQ() {
   return (
     <section id="faq" className="px-6 py-24">
       <div className="mx-auto max-w-3xl">
-        <div className="mb-16 text-center">
+        <FadeUp className="mb-16 text-center">
           <p className="text-brand mb-3 text-sm font-medium tracking-wider uppercase">
             FAQ
           </p>
           <h2 className="text-foreground text-4xl font-bold tracking-tight">
             Common questions
           </h2>
-        </div>
+        </FadeUp>
         <div className="space-y-2">
           {faqs.map((faq, i) => (
             <div
