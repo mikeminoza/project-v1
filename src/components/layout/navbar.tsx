@@ -12,7 +12,6 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
@@ -62,29 +61,27 @@ export function Navbar() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-72">
-            <SheetHeader>
-              <SheetTitle asChild>
-                <Logo size={24} />
-              </SheetTitle>
-            </SheetHeader>
+          <SheetContent side="right" className="flex w-72 flex-col px-6 py-6">
+            <SheetTitle className="sr-only">Navigation</SheetTitle>
+            <Logo size={24} />
+
             <nav className="mt-8 flex flex-col gap-1">
               {navLinks.map((link) => (
-                <Button
+                <a
                   key={link.href}
-                  variant="ghost"
-                  className="justify-start"
-                  asChild
+                  href={link.href}
+                  className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-md px-3 py-2.5 text-sm font-medium transition-colors"
                 >
-                  <a href={link.href}>{link.label}</a>
-                </Button>
+                  {link.label}
+                </a>
               ))}
             </nav>
-            <div className="mt-6 flex flex-col gap-3">
-              <Button variant="outline" asChild>
+
+            <div className="mt-auto flex flex-col gap-2 border-t border-white/5 pt-6">
+              <Button variant="ghost" className="w-full" asChild>
                 <a href="#">Sign in</a>
               </Button>
-              <Button asChild>
+              <Button className="w-full rounded-full" asChild>
                 <a href="#">Get started free</a>
               </Button>
             </div>
