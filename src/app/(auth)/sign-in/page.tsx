@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { GoogleIcon } from '@/components/auth/google-icon'
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
@@ -23,10 +23,10 @@ export default function SignUpPage() {
       {/* Heading */}
       <div className="mb-8 text-center">
         <h1 className="text-foreground text-2xl font-bold tracking-tight">
-          Create your account
+          Welcome back
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
-          Start getting paid on time, automatically.
+          Sign in to your Invoq account.
         </p>
       </div>
 
@@ -48,16 +48,6 @@ export default function SignUpPage() {
       {/* Form */}
       <form className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="name">Full name</Label>
-          <Input
-            id="name"
-            type="text"
-            placeholder="Alex Johnson"
-            autoComplete="name"
-          />
-        </div>
-
-        <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
@@ -68,13 +58,21 @@ export default function SignUpPage() {
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="password">Password</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Password</Label>
+            <Link
+              href="/forgot-password"
+              className="text-muted-foreground hover:text-foreground text-xs transition-colors"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              placeholder="Min. 8 characters"
-              autoComplete="new-password"
+              placeholder="Your password"
+              autoComplete="current-password"
               className="pr-10"
             />
             <button
@@ -93,39 +91,20 @@ export default function SignUpPage() {
         </div>
 
         <Button type="submit" className="mt-2 w-full rounded-full">
-          Create account
+          Sign in
           <ArrowRight className="h-4 w-4" />
         </Button>
       </form>
 
-      {/* Sign in link */}
+      {/* Sign up link */}
       <p className="text-muted-foreground mt-6 text-center text-sm">
-        Already have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link
-          href="/sign-in"
+          href="/sign-up"
           className="text-foreground hover:text-brand font-medium transition-colors"
         >
-          Sign in
+          Sign up free
         </Link>
-      </p>
-
-      {/* Terms */}
-      <p className="text-muted-foreground mt-8 text-center text-xs leading-relaxed">
-        By creating an account you agree to our{' '}
-        <Link
-          href="/terms"
-          className="hover:text-foreground underline underline-offset-4 transition-colors"
-        >
-          Terms of Service
-        </Link>{' '}
-        and{' '}
-        <Link
-          href="/privacy"
-          className="hover:text-foreground underline underline-offset-4 transition-colors"
-        >
-          Privacy Policy
-        </Link>
-        .
       </p>
     </FadeIn>
   )
