@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 import { Logo } from '@/components/ui/logo'
+import { getAvatar } from '@/lib/avatar'
 import { cn } from '@/lib/utils'
 import { useSignOut } from '@/hooks/auth'
 
@@ -30,7 +31,8 @@ export function Sidebar({ user }: SidebarProps) {
   const { signOut } = useSignOut()
 
   const displayName =
-    (user.user_metadata?.full_name as string | undefined) ?? user.email
+    (user.user_metadata?.full_name as string | undefined) ?? user.email ?? ''
+  const { initials, color } = getAvatar(displayName)
 
   function isActive(href: string) {
     return href === '/dashboard'
@@ -65,24 +67,31 @@ export function Sidebar({ user }: SidebarProps) {
       </nav>
 
       {/* User + sign out */}
-      <div className="border-border border-t p-4">
-        <div className="mb-2 px-3">
-          <p className="text-foreground truncate text-sm font-medium">
-            {displayName}
-          </p>
-          {displayName !== user.email && (
-            <p className="text-muted-foreground truncate text-xs">
-              {user.email}
+      <div className="border-border border-t p-3">
+        <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+          <div
+            className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-semibold ${color}`}
+          >
+            {initials}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-foreground truncate text-sm font-medium">
+              {displayName}
             </p>
-          )}
+            {displayName !== user.email && (
+              <p className="text-muted-foreground truncate text-xs">
+                {user.email}
+              </p>
+            )}
+          </div>
+          <button
+            onClick={signOut}
+            aria-label="Sign out"
+            className="text-muted-foreground hover:text-foreground flex-shrink-0 transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
         </div>
-        <button
-          onClick={signOut}
-          className="text-muted-foreground hover:bg-muted hover:text-foreground flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors"
-        >
-          <LogOut className="h-4 w-4 flex-shrink-0" />
-          Sign out
-        </button>
       </div>
     </aside>
   )
