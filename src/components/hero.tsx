@@ -138,27 +138,7 @@ export function Hero() {
                 </p>
               </div>
             </div>
-            <div className="bg-card absolute -bottom-4 -left-4 rounded-2xl border border-white/10 px-4 py-3 shadow-xl">
-              <p className="text-muted-foreground text-xs">Avg. payment time</p>
-              <p className="text-brand text-xl font-bold">3.2 days</p>
-              <p className="text-muted-foreground text-xs">
-                ↓ 8 days faster than before
-              </p>
-            </div>
           </div>
-        </div>
-
-        <div className="mt-20 grid grid-cols-3 gap-8 border-t border-white/5 pt-10">
-          {[
-            { value: '2,400+', label: 'Freelancers using PayNudge' },
-            { value: '$4.2M', label: 'Invoices collected' },
-            { value: '8 days', label: 'Faster average payment' },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="text-foreground text-3xl font-bold">{stat.value}</p>
-              <p className="text-muted-foreground mt-1 text-sm">{stat.label}</p>
-            </div>
-          ))}
         </div>
       </div>
     </section>

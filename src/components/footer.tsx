@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="border-t border-white/5 px-6 py-12">
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-8 lg:grid-cols-4">
+        <div className="grid gap-8 lg:grid-cols-3">
           <div className="flex flex-col gap-4">
             <Link href="/" className="text-lg font-bold">
               Pay<span className="text-brand">Nudge</span>
@@ -43,33 +43,6 @@ export function Footer() {
               <li>
                 <a href="#" className="hover:text-foreground transition-colors">
                   Changelog
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-foreground mb-4 text-sm font-semibold">
-              Company
-            </h4>
-            <ul className="text-muted-foreground space-y-3 text-sm">
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Contact
                 </a>
               </li>
             </ul>

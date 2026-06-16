@@ -9,8 +9,8 @@ export function CTABanner() {
             Ready to stop chasing?
           </h2>
           <p className="text-muted-foreground mx-auto mt-4 max-w-md text-lg">
-            Join 2,400+ freelancers who get paid faster with PayNudge. Free to
-            start, no credit card needed.
+            Start for free — no credit card needed. Set up your first reminder
+            in minutes.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <a
