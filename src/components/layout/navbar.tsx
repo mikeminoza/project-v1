@@ -43,13 +43,13 @@ export function Navbar() {
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-2 md:flex">
           <Link
-            href="#"
+            href="/sign-in"
             className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
           >
             Sign in
           </Link>
           <Link
-            href="#"
+            href="/sign-up"
             className={cn(buttonVariants({ size: 'sm' }), 'rounded-full')}
           >
             Get started free
@@ -82,13 +82,13 @@ export function Navbar() {
 
             <div className="mt-auto flex flex-col gap-2 border-t border-white/5 pt-6">
               <Link
-                href="#"
+                href="/sign-in"
                 className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
               >
                 Sign in
               </Link>
               <Link
-                href="#"
+                href="/sign-up"
                 className={cn(buttonVariants(), 'w-full rounded-full')}
               >
                 Get started free

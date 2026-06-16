@@ -16,7 +16,7 @@ export function CTABanner() {
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <a
-                href="#"
+                href="/sign-up"
                 className="bg-brand text-brand-foreground inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold transition-opacity hover:opacity-90"
               >
                 Get started free

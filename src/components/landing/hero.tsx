@@ -33,7 +33,7 @@ export function Hero() {
             <FadeIn delay={0.3}>
               <div className="flex flex-wrap gap-4">
                 <a
-                  href="#"
+                  href="/sign-up"
                   className="bg-brand text-brand-foreground inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
                 >
                   Start for free

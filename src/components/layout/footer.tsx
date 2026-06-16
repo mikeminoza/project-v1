@@ -51,12 +51,18 @@ export function Footer() {
             </h4>
             <ul className="text-muted-foreground space-y-3 text-sm">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
+                <a
+                  href="/privacy"
+                  className="hover:text-foreground transition-colors"
+                >
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
+                <a
+                  href="/terms"
+                  className="hover:text-foreground transition-colors"
+                >
                   Terms of Service
                 </a>
               </li>

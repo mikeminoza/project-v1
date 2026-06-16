@@ -113,7 +113,7 @@ export function Pricing() {
                   ))}
                 </ul>
                 <a
-                  href="#"
+                  href="/sign-up"
                   className={`block rounded-full py-3 text-center text-sm font-semibold transition-opacity hover:opacity-90 ${
                     plan.highlight
                       ? 'bg-brand text-brand-foreground'
