@@ -2,32 +2,12 @@
 
 import { useState } from 'react'
 import { Plus, Users, Pencil, Trash2, Search } from 'lucide-react'
+import { getAvatar } from '@/lib/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ClientDialog } from './client-dialog'
 import { DeleteDialog } from './delete-dialog'
 import type { Client } from '@/types'
-
-const AVATAR_COLORS = [
-  'bg-blue-500/15 text-blue-400',
-  'bg-violet-500/15 text-violet-400',
-  'bg-emerald-500/15 text-emerald-400',
-  'bg-orange-500/15 text-orange-400',
-  'bg-pink-500/15 text-pink-400',
-  'bg-cyan-500/15 text-cyan-400',
-  'bg-yellow-500/15 text-yellow-400',
-]
-
-function getAvatar(name: string) {
-  const initials = name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
-  const color = AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length]
-  return { initials, color }
-}
 
 interface ClientsViewProps {
   clients: Client[]

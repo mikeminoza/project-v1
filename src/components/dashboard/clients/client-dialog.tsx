@@ -1,7 +1,8 @@
 'use client'
 
-import { AlertCircle, UserPlus } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 import { useClientForm } from '@/hooks/clients'
+import { getAvatar } from '@/lib/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -42,18 +43,23 @@ export function ClientDialog({
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = form
 
   const isEdit = !!client
+  const { initials, color } = getAvatar(watch('name'))
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="bg-brand/10 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg">
-              <UserPlus className="text-brand h-4 w-4" />
+            {/* Live avatar — updates as user types the name */}
+            <div
+              className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors ${color}`}
+            >
+              {initials}
             </div>
             <div>
               <DialogTitle>{isEdit ? 'Edit client' : 'New client'}</DialogTitle>
@@ -66,15 +72,16 @@ export function ClientDialog({
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          <div className="space-y-3">
-            <div className="space-y-1.5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Required fields */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 space-y-1.5">
               <Label htmlFor="name">Name</Label>
               <Input id="name" placeholder="Jane Smith" {...register('name')} />
               {errors.name && <FieldError message={errors.name.message!} />}
             </div>
 
-            <div className="space-y-1.5">
+            <div className="col-span-2 space-y-1.5">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -86,30 +93,33 @@ export function ClientDialog({
             </div>
           </div>
 
-          <div className="border-border space-y-3 rounded-lg border p-3">
-            <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-              Optional details
-            </p>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="company">Company</Label>
-                <Input
-                  id="company"
-                  placeholder="Acme Inc."
-                  {...register('company')}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="phone">Phone</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+1 555 0000"
-                  {...register('phone')}
-                />
-              </div>
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="border-border h-px flex-1 border-t" />
+            <span className="text-muted-foreground text-xs">Optional</span>
+            <div className="border-border h-px flex-1 border-t" />
+          </div>
+
+          {/* Optional fields */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="company">Company</Label>
+              <Input
+                id="company"
+                placeholder="Acme Inc."
+                {...register('company')}
+              />
             </div>
             <div className="space-y-1.5">
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="+1 555 0000"
+                {...register('phone')}
+              />
+            </div>
+            <div className="col-span-2 space-y-1.5">
               <Label htmlFor="address">Address</Label>
               <Input
                 id="address"
@@ -131,6 +141,7 @@ export function ClientDialog({
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
+              {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               {isLoading ? 'Saving…' : isEdit ? 'Save changes' : 'Add client'}
             </Button>
           </DialogFooter>
