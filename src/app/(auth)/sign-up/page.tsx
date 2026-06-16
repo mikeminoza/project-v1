@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
@@ -9,18 +10,52 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { GoogleIcon } from '@/components/auth/google-icon'
+import { createClient } from '@/lib/supabase/client'
 
 export default function SignUpPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setIsLoading(true)
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: name } },
+    })
+
+    if (error) {
+      setError(error.message)
+      setIsLoading(false)
+      return
+    }
+
+    router.push(`/verify-email?email=${encodeURIComponent(email)}`)
+  }
+
+  async function handleGoogle() {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    })
+  }
 
   return (
     <FadeIn className="w-full max-w-sm">
-      {/* Logo */}
       <div className="mb-8 flex justify-center">
         <Logo size={28} />
       </div>
 
-      {/* Heading */}
       <div className="mb-8 text-center">
         <h1 className="text-foreground text-2xl font-bold tracking-tight">
           Create your account
@@ -30,13 +65,16 @@ export default function SignUpPage() {
         </p>
       </div>
 
-      {/* Google OAuth */}
-      <Button variant="outline" className="w-full gap-2">
+      <Button
+        variant="outline"
+        className="w-full gap-2"
+        type="button"
+        onClick={handleGoogle}
+      >
         <GoogleIcon />
         Continue with Google
       </Button>
 
-      {/* Divider */}
       <div className="my-6 flex items-center gap-3">
         <div className="bg-border h-px flex-1" />
         <span className="text-muted-foreground text-xs">
@@ -45,8 +83,7 @@ export default function SignUpPage() {
         <div className="bg-border h-px flex-1" />
       </div>
 
-      {/* Form */}
-      <form className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="name">Full name</Label>
           <Input
@@ -54,6 +91,9 @@ export default function SignUpPage() {
             type="text"
             placeholder="Alex Johnson"
             autoComplete="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
           />
         </div>
 
@@ -64,6 +104,9 @@ export default function SignUpPage() {
             type="email"
             placeholder="alex@studio.com"
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
 
@@ -76,6 +119,10 @@ export default function SignUpPage() {
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               className="pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
             />
             <button
               type="button"
@@ -92,13 +139,18 @@ export default function SignUpPage() {
           </div>
         </div>
 
-        <Button type="submit" className="mt-2 w-full rounded-full">
-          Create account
-          <ArrowRight className="h-4 w-4" />
+        {error && <p className="text-destructive text-sm">{error}</p>}
+
+        <Button
+          type="submit"
+          className="mt-2 w-full rounded-full"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Creating account…' : 'Create account'}
+          {!isLoading && <ArrowRight className="h-4 w-4" />}
         </Button>
       </form>
 
-      {/* Sign in link */}
       <p className="text-muted-foreground mt-6 text-center text-sm">
         Already have an account?{' '}
         <Link
@@ -109,7 +161,6 @@ export default function SignUpPage() {
         </Link>
       </p>
 
-      {/* Terms */}
       <p className="text-muted-foreground mt-8 text-center text-xs leading-relaxed">
         By creating an account you agree to our{' '}
         <Link

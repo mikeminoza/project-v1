@@ -1,39 +1,74 @@
+'use client'
+
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { ArrowLeft, MailCheck } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
 import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
+import { createClient } from '@/lib/supabase/client'
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
+  const searchParams = useSearchParams()
+  const email = searchParams.get('email') ?? ''
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
+    'idle',
+  )
+
+  async function handleResend() {
+    setStatus('sending')
+    const supabase = createClient()
+    const { error } = await supabase.auth.resend({ type: 'signup', email })
+    setStatus(error ? 'error' : 'sent')
+  }
+
   return (
     <FadeIn className="w-full max-w-sm text-center">
-      {/* Logo */}
       <div className="mb-8 flex justify-center">
         <Logo size={28} />
       </div>
 
-      {/* Icon */}
       <div className="mb-6 flex justify-center">
         <div className="bg-brand/10 flex h-16 w-16 items-center justify-center rounded-full">
           <MailCheck className="text-brand h-8 w-8" />
         </div>
       </div>
 
-      {/* Heading */}
       <h1 className="text-foreground mb-3 text-2xl font-bold tracking-tight">
         Check your inbox
       </h1>
       <p className="text-muted-foreground mb-8 text-sm leading-relaxed">
-        We sent a verification link to your email address. Click the link to
-        activate your account. The link expires in 24 hours.
+        We sent a verification link to{' '}
+        {email ? (
+          <strong className="text-foreground">{email}</strong>
+        ) : (
+          'your email address'
+        )}
+        . Click it to activate your account. It expires in 24 hours.
       </p>
 
-      {/* Resend */}
-      <Button variant="outline" className="w-full">
-        Resend verification email
-      </Button>
+      {status === 'sent' ? (
+        <p className="text-brand text-sm font-medium">
+          Email resent — check your inbox.
+        </p>
+      ) : (
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={handleResend}
+          disabled={status === 'sending'}
+        >
+          {status === 'sending' ? 'Sending…' : 'Resend verification email'}
+        </Button>
+      )}
 
-      {/* Back link */}
+      {status === 'error' && (
+        <p className="text-destructive mt-2 text-sm">
+          Something went wrong. Please try again.
+        </p>
+      )}
+
       <div className="mt-6">
         <Link
           href="/sign-in"
@@ -44,5 +79,13 @@ export default function VerifyEmailPage() {
         </Link>
       </div>
     </FadeIn>
+  )
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense>
+      <VerifyEmailContent />
+    </Suspense>
   )
 }

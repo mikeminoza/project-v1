@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
@@ -8,19 +9,46 @@ import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { createClient } from '@/lib/supabase/client'
 
 export default function ResetPasswordPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+
+    if (password !== confirm) {
+      setError('Passwords do not match.')
+      return
+    }
+
+    setIsLoading(true)
+    const supabase = createClient()
+    const { error } = await supabase.auth.updateUser({ password })
+
+    if (error) {
+      setError(error.message)
+      setIsLoading(false)
+      return
+    }
+
+    router.push('/dashboard')
+    router.refresh()
+  }
 
   return (
     <FadeIn className="w-full max-w-sm">
-      {/* Logo */}
       <div className="mb-8 flex justify-center">
         <Logo size={28} />
       </div>
 
-      {/* Heading */}
       <div className="mb-8 text-center">
         <h1 className="text-foreground text-2xl font-bold tracking-tight">
           Set new password
@@ -30,8 +58,7 @@ export default function ResetPasswordPage() {
         </p>
       </div>
 
-      {/* Form */}
-      <form className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="password">New password</Label>
           <div className="relative">
@@ -41,6 +68,10 @@ export default function ResetPasswordPage() {
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               className="pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
             />
             <button
               type="button"
@@ -66,6 +97,9 @@ export default function ResetPasswordPage() {
               placeholder="Repeat your password"
               autoComplete="new-password"
               className="pr-10"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              required
             />
             <button
               type="button"
@@ -82,13 +116,18 @@ export default function ResetPasswordPage() {
           </div>
         </div>
 
-        <Button type="submit" className="mt-2 w-full rounded-full">
-          Update password
-          <ArrowRight className="h-4 w-4" />
+        {error && <p className="text-destructive text-sm">{error}</p>}
+
+        <Button
+          type="submit"
+          className="mt-2 w-full rounded-full"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Updating…' : 'Update password'}
+          {!isLoading && <ArrowRight className="h-4 w-4" />}
         </Button>
       </form>
 
-      {/* Back link */}
       <div className="mt-6 text-center">
         <Link
           href="/sign-in"
