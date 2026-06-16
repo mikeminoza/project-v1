@@ -7,7 +7,7 @@ import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useSignIn } from '@/hooks/use-sign-in'
+import { useSignIn } from '@/hooks/auth'
 
 export default function SignInPage() {
   const {

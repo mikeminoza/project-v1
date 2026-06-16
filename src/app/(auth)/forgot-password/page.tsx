@@ -7,7 +7,7 @@ import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useForgotPassword } from '@/hooks/use-forgot-password'
+import { useForgotPassword } from '@/hooks/auth'
 
 export default function ForgotPasswordPage() {
   const { form, onSubmit, isLoading, serverError, sentEmail } =

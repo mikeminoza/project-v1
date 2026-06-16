@@ -12,7 +12,7 @@ import {
 import type { User } from '@supabase/supabase-js'
 import { Logo } from '@/components/ui/logo'
 import { cn } from '@/lib/utils'
-import { useSignOut } from '@/hooks/use-sign-out'
+import { useSignOut } from '@/hooks/auth'
 
 const navItems = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },

@@ -6,7 +6,7 @@ import { ArrowLeft, MailCheck } from 'lucide-react'
 import { FadeIn } from '@/components/ui/motion'
 import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
-import { useVerifyEmail } from '@/hooks/use-verify-email'
+import { useVerifyEmail } from '@/hooks/auth'
 
 function VerifyEmailContent() {
   const { email, status, resend } = useVerifyEmail()
