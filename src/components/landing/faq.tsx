@@ -1,8 +1,9 @@
 ﻿'use client'
 
 import { useState } from 'react'
-import { Minus, Plus } from 'lucide-react'
-import { FadeUp } from '@/components/ui/motion'
+import { Plus } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { FadeUp, Stagger, StaggerItem } from '@/components/ui/motion'
 
 const faqs = [
   {
@@ -51,35 +52,51 @@ export function FAQ() {
             Common questions
           </h2>
         </FadeUp>
-        <div className="space-y-2">
+        <Stagger className="space-y-2">
           {faqs.map((faq, i) => (
-            <div
-              key={i}
-              className="bg-card overflow-hidden rounded-xl border border-white/5"
-            >
-              <button
-                className="flex w-full items-center justify-between px-6 py-5 text-left"
-                onClick={() => setOpen(open === i ? null : i)}
-              >
-                <span className="text-foreground font-medium">
-                  {faq.question}
-                </span>
-                {open === i ? (
-                  <Minus className="text-muted-foreground h-4 w-4 shrink-0" />
-                ) : (
-                  <Plus className="text-muted-foreground h-4 w-4 shrink-0" />
-                )}
-              </button>
-              {open === i && (
-                <div className="px-6 pb-5">
-                  <p className="text-muted-foreground leading-relaxed">
-                    {faq.answer}
-                  </p>
-                </div>
-              )}
-            </div>
+            <StaggerItem key={i}>
+              <div className="bg-card overflow-hidden rounded-xl border border-white/5">
+                <button
+                  className="flex w-full items-center justify-between px-6 py-5 text-left"
+                  onClick={() => setOpen(open === i ? null : i)}
+                >
+                  <span className="text-foreground font-medium">
+                    {faq.question}
+                  </span>
+                  <motion.div
+                    animate={{ rotate: open === i ? 45 : 0 }}
+                    transition={{ type: 'spring', stiffness: 250, damping: 22 }}
+                    className="shrink-0"
+                  >
+                    <Plus className="text-muted-foreground h-4 w-4" />
+                  </motion.div>
+                </button>
+                <AnimatePresence initial={false}>
+                  {open === i && (
+                    <motion.div
+                      key="answer"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 30,
+                      }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div className="px-6 pb-5">
+                        <p className="text-muted-foreground leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )

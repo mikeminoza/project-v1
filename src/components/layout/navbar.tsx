@@ -1,14 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { Menu } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from '@/components/ui/navigation-menu'
+import { cn } from '@/lib/utils'
 import {
   Sheet,
   SheetContent,
@@ -29,37 +25,44 @@ export function Navbar() {
         <Logo size={28} />
 
         {/* Desktop nav */}
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList>
-            {navLinks.map((link) => (
-              <NavigationMenuItem key={link.href}>
-                <NavigationMenuLink
-                  href={link.href}
-                  className="text-muted-foreground hover:text-foreground bg-transparent text-sm transition-colors hover:bg-transparent focus:bg-transparent"
-                >
-                  {link.label}
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+        <nav className="hidden items-center md:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                buttonVariants({ variant: 'ghost', size: 'sm' }),
+                'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-2 md:flex">
-          <Button variant="ghost" size="sm" asChild>
-            <a href="#">Sign in</a>
-          </Button>
-          <Button size="sm" className="rounded-full" asChild>
-            <a href="#">Get started free</a>
-          </Button>
+          <Link
+            href="#"
+            className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
+          >
+            Sign in
+          </Link>
+          <Link
+            href="#"
+            className={cn(buttonVariants({ size: 'sm' }), 'rounded-full')}
+          >
+            Get started free
+          </Link>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — Base UI uses render prop, not asChild */}
         <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
+          <SheetTrigger
+            className="md:hidden"
+            render={<Button variant="ghost" size="icon" />}
+          >
+            <Menu className="h-5 w-5" />
           </SheetTrigger>
           <SheetContent side="right" className="flex w-72 flex-col px-6 py-6">
             <SheetTitle className="sr-only">Navigation</SheetTitle>
@@ -78,12 +81,18 @@ export function Navbar() {
             </nav>
 
             <div className="mt-auto flex flex-col gap-2 border-t border-white/5 pt-6">
-              <Button variant="ghost" className="w-full" asChild>
-                <a href="#">Sign in</a>
-              </Button>
-              <Button className="w-full rounded-full" asChild>
-                <a href="#">Get started free</a>
-              </Button>
+              <Link
+                href="#"
+                className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
+              >
+                Sign in
+              </Link>
+              <Link
+                href="#"
+                className={cn(buttonVariants(), 'w-full rounded-full')}
+              >
+                Get started free
+              </Link>
             </div>
           </SheetContent>
         </Sheet>
