@@ -81,6 +81,11 @@ export async function sendReminderAction(
       emailSubject = subject
     }
 
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ''
+    const portalUrl = appUrl
+      ? `${appUrl}/pay/${invoice.portal_token}`
+      : undefined
+
     const html = renderReminderEmail({
       clientName: invoice.client.name,
       invoiceNumber: invoice.number,
@@ -93,6 +98,7 @@ export async function sendReminderAction(
       notes: invoice.notes,
       lineItems: invoice.line_items,
       customMessage,
+      portalUrl,
     })
 
     const { error: emailError } = await resend.emails.send({

@@ -15,6 +15,7 @@ interface ReminderEmailData {
   notes?: string | null
   lineItems?: LineItem[]
   customMessage?: string
+  portalUrl?: string
 }
 
 const ACCENT: Record<string, string> = {
@@ -174,6 +175,7 @@ export function renderReminderEmail(data: ReminderEmailData): string {
     notes,
     lineItems,
     customMessage,
+    portalUrl,
   } = data
   const accent = getAccent(tone.level)
 
@@ -256,6 +258,19 @@ export function renderReminderEmail(data: ReminderEmailData): string {
             </td>
           </tr>
 
+          ${
+            portalUrl
+              ? `<!-- Pay CTA -->
+          <tr>
+            <td style="padding:0 40px 24px;text-align:center;">
+              <a href="${portalUrl}" style="display:inline-block;padding:12px 28px;background:#111827;color:#ffffff;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;letter-spacing:-.01em;">
+                View &amp; pay invoice &rarr;
+              </a>
+            </td>
+          </tr>`
+              : ''
+          }
+
           <!-- Invoice details box -->
           <tr>
             <td style="padding:0 40px 32px;">
@@ -302,4 +317,54 @@ export function renderReminderEmail(data: ReminderEmailData): string {
   </table>
 </body>
 </html>`
+}
+
+export function renderPaymentNotificationEmail(data: {
+  clientName: string
+  invoiceNumber: string
+  amount: number
+  currency: string
+  invoiceUrl: string
+}): { subject: string; html: string } {
+  const { clientName, invoiceNumber, amount, currency, invoiceUrl } = data
+  const subject = `Payment confirmed — ${invoiceNumber}`
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>${subject}</title></head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="520" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
+          <tr><td style="height:4px;background:#10b981;font-size:0;">&nbsp;</td></tr>
+          <tr>
+            <td style="padding:36px 40px 28px;">
+              <p style="margin:0 0 16px;font-size:24px;">&#10003;</p>
+              <p style="margin:0 0 8px;font-size:18px;font-weight:700;color:#111827;">Payment confirmed</p>
+              <p style="margin:0;font-size:15px;color:#374151;line-height:1.6;">
+                <strong>${clientName}</strong> has marked invoice
+                <strong>${invoiceNumber}</strong> (${fmtCurrency(amount, currency)}) as paid.
+                Log in to verify receipt and update your records if needed.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 40px 32px;">
+              <a href="${invoiceUrl}" style="display:inline-block;padding:10px 22px;background:#111827;color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">
+                View invoice &rarr;
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 40px;background:#f9fafb;border-top:1px solid #e5e7eb;">
+              <p style="margin:0;font-size:12px;color:#9ca3af;">Powered by Invoq</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+  return { subject, html }
 }

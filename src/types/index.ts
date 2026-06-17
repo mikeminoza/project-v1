@@ -9,6 +9,7 @@ export type {
   InvoiceStatus,
   Invoice,
   InvoiceWithClient,
+  InvoicePortalView,
   LineItem,
 } from './invoice'
 export type { ReminderTrigger, Reminder, ReminderSettings } from './reminder'

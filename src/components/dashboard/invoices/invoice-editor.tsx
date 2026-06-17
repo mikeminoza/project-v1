@@ -161,6 +161,7 @@ export function InvoiceEditor({
     ...watchedValues,
     id: invoice?.id ?? '',
     user_id: invoice?.user_id ?? '',
+    portal_token: invoice?.portal_token ?? '',
     created_at: invoice?.created_at ?? '',
     updated_at: invoice?.updated_at ?? '',
     amount: total,

@@ -1,4 +1,5 @@
 import type { Client } from './client'
+import type { UserProfile } from './user'
 
 export type InvoiceStatus = 'draft' | 'pending' | 'paid' | 'overdue'
 
@@ -23,10 +24,15 @@ export interface Invoice {
   notes: string | null
   payment_details: string | null
   logo_url: string | null
+  portal_token: string
   created_at: string
   updated_at: string
 }
 
 export interface InvoiceWithClient extends Invoice {
   client: Client
+}
+
+export type InvoicePortalView = InvoiceWithClient & {
+  profile: UserProfile | null
 }

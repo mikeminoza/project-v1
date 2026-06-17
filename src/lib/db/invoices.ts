@@ -1,5 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Invoice, InvoiceStatus, InvoiceWithClient } from '@/types'
+import type {
+  Invoice,
+  InvoicePortalView,
+  InvoiceStatus,
+  InvoiceWithClient,
+  UserProfile,
+} from '@/types'
 
 type InvoicePayload = Pick<
   Invoice,
@@ -158,10 +164,35 @@ async function getNextNumber(supabase: SupabaseClient): Promise<string> {
   return `INV-${next}`
 }
 
+async function getByPortalToken(
+  supabase: SupabaseClient,
+  token: string,
+): Promise<InvoicePortalView | null> {
+  const { data: invoice, error } = await supabase
+    .from('invoices')
+    .select('*, client:clients(*)')
+    .eq('portal_token', token)
+    .maybeSingle()
+  if (error) throw error
+  if (!invoice) return null
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', invoice.user_id)
+    .maybeSingle()
+
+  return {
+    ...(invoice as InvoiceWithClient),
+    profile: profile as UserProfile | null,
+  } as InvoicePortalView
+}
+
 export const invoicesDb = {
   getAll,
   getRecent,
   getById,
+  getByPortalToken,
   getStats,
   getOutstanding,
   getMonthlyPaid,
