@@ -1,4 +1,9 @@
-export type { UserProfile } from './user'
+export type {
+  UserProfile,
+  EmailTemplateLevel,
+  EmailTemplate,
+  EmailTemplates,
+} from './user'
 export type { Client } from './client'
 export type {
   InvoiceStatus,

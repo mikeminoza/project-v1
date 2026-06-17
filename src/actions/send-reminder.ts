@@ -4,9 +4,25 @@ import { Resend } from 'resend'
 import { createClient } from '@/lib/supabase/server'
 import { invoicesDb, remindersDb } from '@/lib/db'
 import { getEscalationTone } from '@/lib/escalation'
-import { getEmailContent, renderReminderEmail } from '@/lib/email'
+import {
+  getEmailContent,
+  renderReminderEmail,
+  DEFAULT_TEMPLATES,
+  substituteVars,
+  fmtCurrency,
+  fmtDate,
+} from '@/lib/email'
+import type { EmailTemplateLevel, EmailTemplates } from '@/types'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
+
+const TEMPLATE_LEVELS = new Set<string>([
+  'nudge',
+  'follow-up',
+  'firm',
+  'strong',
+  'final',
+])
 
 export async function sendReminderAction(
   invoiceId: string,
@@ -21,7 +37,11 @@ export async function sendReminderAction(
 
     const [invoice, { data: profile }] = await Promise.all([
       invoicesDb.getById(supabase, invoiceId),
-      supabase.from('profiles').select('full_name').eq('id', user.id).single(),
+      supabase
+        .from('profiles')
+        .select('full_name, email_templates')
+        .eq('id', user.id)
+        .single(),
     ])
 
     if (!invoice) return { success: false, error: 'Invoice not found' }
@@ -35,11 +55,31 @@ export async function sendReminderAction(
     const tone = getEscalationTone(invoice)
     const senderName = profile?.full_name || user.email!
     const from = 'onboarding@resend.dev'
-    const { subject } = getEmailContent(
-      tone.level,
-      invoice.client.name,
-      invoice.number,
-    )
+
+    let emailSubject: string
+    let customMessage: string | undefined
+
+    if (TEMPLATE_LEVELS.has(tone.level)) {
+      const emailTemplates = (profile?.email_templates as EmailTemplates) ?? {}
+      const tplLevel = tone.level as EmailTemplateLevel
+      const template = emailTemplates[tplLevel] ?? DEFAULT_TEMPLATES[tplLevel]
+      const vars = {
+        first_name: invoice.client.name.split(' ')[0],
+        client_name: invoice.client.name,
+        invoice_number: invoice.number,
+        amount: fmtCurrency(invoice.amount, invoice.currency),
+        due_date: fmtDate(invoice.due_date),
+      }
+      emailSubject = substituteVars(template.subject, vars)
+      customMessage = substituteVars(template.message, vars)
+    } else {
+      const { subject } = getEmailContent(
+        tone.level,
+        invoice.client.name,
+        invoice.number,
+      )
+      emailSubject = subject
+    }
 
     const html = renderReminderEmail({
       clientName: invoice.client.name,
@@ -52,6 +92,7 @@ export async function sendReminderAction(
       tone,
       notes: invoice.notes,
       lineItems: invoice.line_items,
+      customMessage,
     })
 
     const { error: emailError } = await resend.emails.send({
@@ -59,7 +100,7 @@ export async function sendReminderAction(
       to: invoice.client.email,
       // Replies go back to the freelancer, not the Invoq sender address
       replyTo: user.email!,
-      subject,
+      subject: emailSubject,
       html,
     })
 

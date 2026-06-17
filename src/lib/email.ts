@@ -1,5 +1,6 @@
 import type { EscalationLevel, EscalationTone } from './escalation'
 import type { LineItem } from '@/types'
+import type { EmailTemplateLevel } from '@/types/user'
 import { format, parseISO } from 'date-fns'
 
 interface ReminderEmailData {
@@ -13,6 +14,7 @@ interface ReminderEmailData {
   tone: EscalationTone
   notes?: string | null
   lineItems?: LineItem[]
+  customMessage?: string
 }
 
 const ACCENT: Record<string, string> = {
@@ -92,7 +94,50 @@ export function getEmailContent(
   }
 }
 
-function fmtCurrency(amount: number, currency: string) {
+export type TemplateVars = {
+  first_name: string
+  client_name: string
+  invoice_number: string
+  amount: string
+  due_date: string
+}
+
+export const DEFAULT_TEMPLATES: Record<
+  EmailTemplateLevel,
+  { subject: string; message: string }
+> = {
+  nudge: {
+    subject: 'Quick note about invoice {{invoice_number}}',
+    message: `Hi {{first_name}},\n\nHope you're doing well! I just wanted to send a quick follow-up — invoice {{invoice_number}} was due a few days ago. Could you let me know when to expect payment? Happy to answer any questions.`,
+  },
+  'follow-up': {
+    subject: 'Following up on invoice {{invoice_number}}',
+    message: `Hi {{first_name}},\n\nI'm following up on invoice {{invoice_number}}, which is now past its due date. I'd appreciate it if you could arrange payment at your earliest convenience, or reach out if there's anything preventing it.`,
+  },
+  firm: {
+    subject: 'Invoice {{invoice_number}} — payment overdue',
+    message: `Dear {{client_name}},\n\nI'm writing regarding the outstanding invoice {{invoice_number}}, which is now significantly overdue. Please arrange payment promptly. If you have already sent payment, please disregard this notice and let me know.`,
+  },
+  strong: {
+    subject: 'Urgent: Invoice {{invoice_number}} overdue',
+    message: `Dear {{client_name}},\n\nThis is an urgent notice regarding invoice {{invoice_number}}, which is now considerably overdue. I need you to process payment immediately or contact me to discuss a resolution before further action is taken.`,
+  },
+  final: {
+    subject: 'Final notice: Invoice {{invoice_number}}',
+    message: `Dear {{client_name}},\n\nThis is a final notice regarding your outstanding invoice {{invoice_number}}. Despite previous reminders, payment has not been received. Please settle the outstanding balance immediately. Failure to do so may result in further action to recover the amount owed.`,
+  },
+}
+
+export function substituteVars(text: string, vars: TemplateVars): string {
+  return text
+    .replace(/\{\{first_name\}\}/g, vars.first_name)
+    .replace(/\{\{client_name\}\}/g, vars.client_name)
+    .replace(/\{\{invoice_number\}\}/g, vars.invoice_number)
+    .replace(/\{\{amount\}\}/g, vars.amount)
+    .replace(/\{\{due_date\}\}/g, vars.due_date)
+}
+
+export function fmtCurrency(amount: number, currency: string) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
@@ -100,12 +145,20 @@ function fmtCurrency(amount: number, currency: string) {
   }).format(amount)
 }
 
-function fmtDate(dateStr: string) {
+export function fmtDate(dateStr: string) {
   try {
     return format(parseISO(dateStr), 'MMMM d, yyyy')
   } catch {
     return dateStr
   }
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 export function renderReminderEmail(data: ReminderEmailData): string {
@@ -120,13 +173,20 @@ export function renderReminderEmail(data: ReminderEmailData): string {
     tone,
     notes,
     lineItems,
+    customMessage,
   } = data
   const accent = getAccent(tone.level)
-  const { greeting, body } = getEmailContent(
-    tone.level,
-    clientName,
-    invoiceNumber,
-  )
+
+  const messageHtml = customMessage
+    ? `<p style="margin:0;font-size:15px;color:#374151;line-height:1.6;white-space:pre-wrap;">${escapeHtml(customMessage)}</p>`
+    : (() => {
+        const { greeting, body } = getEmailContent(
+          tone.level,
+          clientName,
+          invoiceNumber,
+        )
+        return `<p style="margin:0 0 12px;font-size:15px;color:#111827;">${greeting}</p><p style="margin:0;font-size:15px;color:#374151;line-height:1.6;">${body}</p>`
+      })()
 
   const lineItemRows =
     lineItems && lineItems.length > 0
@@ -189,11 +249,10 @@ export function renderReminderEmail(data: ReminderEmailData): string {
             </td>
           </tr>
 
-          <!-- Greeting + body -->
+          <!-- Message -->
           <tr>
             <td style="padding:24px 40px;">
-              <p style="margin:0 0 12px;font-size:15px;color:#111827;">${greeting}</p>
-              <p style="margin:0;font-size:15px;color:#374151;line-height:1.6;">${body}</p>
+              ${messageHtml}
             </td>
           </tr>
 

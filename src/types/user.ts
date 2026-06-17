@@ -1,3 +1,17 @@
+export type EmailTemplateLevel =
+  | 'nudge'
+  | 'follow-up'
+  | 'firm'
+  | 'strong'
+  | 'final'
+
+export interface EmailTemplate {
+  subject: string
+  message: string
+}
+
+export type EmailTemplates = Partial<Record<EmailTemplateLevel, EmailTemplate>>
+
 export interface UserProfile {
   id: string
   email: string
@@ -10,6 +24,7 @@ export interface UserProfile {
   tax_id: string | null
   logo_url: string | null
   default_payment_details: string | null
+  email_templates: EmailTemplates
   created_at: string
   updated_at: string
 }
