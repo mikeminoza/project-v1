@@ -1,7 +1,18 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { UserProfile } from '@/types'
 
-type ProfilePayload = Pick<UserProfile, 'full_name' | 'avatar_url'>
+type ProfilePayload = Pick<
+  UserProfile,
+  | 'full_name'
+  | 'avatar_url'
+  | 'business_name'
+  | 'business_address'
+  | 'business_phone'
+  | 'business_website'
+  | 'tax_id'
+  | 'logo_url'
+  | 'default_payment_details'
+>
 
 async function getById(
   supabase: SupabaseClient,

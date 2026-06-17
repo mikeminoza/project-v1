@@ -1,10 +1,24 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Users, Pencil, Trash2, Search } from 'lucide-react'
+import {
+  Plus,
+  Users,
+  Pencil,
+  Trash2,
+  Search,
+  MoreHorizontal,
+} from 'lucide-react'
 import { getAvatar } from '@/lib/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { ClientDialog } from './client-dialog'
 import { DeleteDialog } from './delete-dialog'
 import type { Client } from '@/types'
@@ -123,7 +137,7 @@ export function ClientsView({ clients }: ClientsViewProps) {
                       return (
                         <tr
                           key={client.id}
-                          className="hover:bg-muted/40 group transition-colors"
+                          className="hover:bg-muted/40 transition-colors"
                         >
                           {/* Name + company */}
                           <td className="px-4 py-3">
@@ -154,26 +168,38 @@ export function ClientsView({ clients }: ClientsViewProps) {
                             {client.phone ?? '—'}
                           </td>
 
-                          {/* Actions — visible on row hover */}
+                          {/* Actions */}
                           <td className="px-4 py-3">
-                            <div className="flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                onClick={() => openEdit(client)}
-                                aria-label="Edit client"
-                              >
-                                <Pencil className="h-3.5 w-3.5" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                onClick={() => openDelete(client)}
-                                aria-label="Delete client"
-                                className="hover:text-destructive"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </Button>
+                            <div className="flex justify-end">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger
+                                  render={
+                                    <Button
+                                      variant="ghost"
+                                      size="icon-sm"
+                                      aria-label="Client actions"
+                                    />
+                                  }
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem
+                                    onClick={() => openEdit(client)}
+                                  >
+                                    <Pencil className="h-4 w-4" />
+                                    Edit
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem
+                                    variant="destructive"
+                                    onClick={() => openDelete(client)}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </div>
                           </td>
                         </tr>

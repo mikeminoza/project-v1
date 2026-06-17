@@ -29,6 +29,35 @@ async function create(
   return data as Reminder
 }
 
+async function createSent(
+  supabase: SupabaseClient,
+  payload: ReminderPayload,
+): Promise<Reminder> {
+  const { data, error } = await supabase
+    .from('reminders')
+    .insert({ ...payload, sent_at: new Date().toISOString() })
+    .select()
+    .single()
+  if (error) throw error
+  return data as Reminder
+}
+
+async function getLastByInvoice(
+  supabase: SupabaseClient,
+  invoiceId: string,
+): Promise<Reminder | null> {
+  const { data, error } = await supabase
+    .from('reminders')
+    .select('*')
+    .eq('invoice_id', invoiceId)
+    .not('sent_at', 'is', null)
+    .order('sent_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (error) throw error
+  return data as Reminder | null
+}
+
 async function markSent(
   supabase: SupabaseClient,
   id: string,
@@ -78,7 +107,9 @@ async function updateSettings(
 
 export const remindersDb = {
   getByInvoice,
+  getLastByInvoice,
   create,
+  createSent,
   markSent,
   remove,
   getSettings,

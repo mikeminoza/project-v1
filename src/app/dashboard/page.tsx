@@ -5,6 +5,7 @@ import { clientsDb, invoicesDb } from '@/lib/db'
 import { getAvatar } from '@/lib/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import { StatCard } from '@/components/dashboard/stat-card'
+import { OutstandingInvoicesWidget } from '@/components/dashboard/outstanding-invoices'
 import { cn } from '@/lib/utils'
 
 function formatCurrency(amount: number) {
@@ -18,10 +19,13 @@ function formatCurrency(amount: number) {
 export default async function DashboardPage() {
   const supabase = await createClient()
 
-  const [stats, recentClients] = await Promise.all([
-    invoicesDb.getStats(supabase),
-    clientsDb.getRecent(supabase),
-  ])
+  const [stats, recentClients, outstandingInvoices, monthlyPaid] =
+    await Promise.all([
+      invoicesDb.getStats(supabase),
+      clientsDb.getRecent(supabase),
+      invoicesDb.getOutstanding(supabase, 5),
+      invoicesDb.getMonthlyPaid(supabase),
+    ])
 
   const { total: totalInvoices, outstanding, paid, overdue } = stats
 
@@ -85,39 +89,11 @@ export default async function DashboardPage() {
 
       {/* Bottom grid */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Recent Invoices */}
-        <div className="bg-card border-border rounded-xl border">
-          <div className="border-border flex items-center justify-between border-b px-6 py-4">
-            <h2 className="text-foreground font-semibold">Recent Invoices</h2>
-            <Link
-              href="/dashboard/invoices"
-              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-            >
-              View all
-            </Link>
-          </div>
-          <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
-            <div className="bg-muted mb-4 flex h-12 w-12 items-center justify-center rounded-full">
-              <FileText className="text-muted-foreground h-5 w-5" />
-            </div>
-            <h3 className="text-foreground mb-1 text-sm font-semibold">
-              No invoices yet
-            </h3>
-            <p className="text-muted-foreground mb-5 text-sm">
-              Create your first invoice to start tracking payments.
-            </p>
-            <Link
-              href="/dashboard/invoices/new"
-              className={cn(
-                buttonVariants({ variant: 'outline', size: 'sm' }),
-                'gap-2 rounded-full',
-              )}
-            >
-              <Plus className="h-3.5 w-3.5" />
-              New invoice
-            </Link>
-          </div>
-        </div>
+        <OutstandingInvoicesWidget
+          invoices={outstandingInvoices}
+          monthlyPaid={monthlyPaid}
+          outstandingTotal={outstanding}
+        />
 
         {/* Recent Clients */}
         <div className="bg-card border-border rounded-xl border">

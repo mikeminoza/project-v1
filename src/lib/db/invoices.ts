@@ -6,11 +6,14 @@ type InvoicePayload = Pick<
   | 'client_id'
   | 'number'
   | 'amount'
+  | 'line_items'
   | 'currency'
   | 'issue_date'
   | 'due_date'
   | 'status'
   | 'notes'
+  | 'payment_details'
+  | 'logo_url'
 >
 
 export interface InvoiceStats {
@@ -117,11 +120,52 @@ async function remove(supabase: SupabaseClient, id: string): Promise<void> {
   if (error) throw error
 }
 
+async function getOutstanding(
+  supabase: SupabaseClient,
+  limit = 5,
+): Promise<InvoiceWithClient[]> {
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*, client:clients(id, name, email, company)')
+    .in('status', ['pending', 'overdue'])
+    .order('due_date', { ascending: true })
+    .limit(limit)
+  if (error) throw error
+  return (data ?? []) as InvoiceWithClient[]
+}
+
+async function getMonthlyPaid(supabase: SupabaseClient): Promise<number> {
+  const now = new Date()
+  const startOfMonth = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1,
+  ).toISOString()
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('amount')
+    .eq('status', 'paid')
+    .gte('updated_at', startOfMonth)
+  if (error) throw error
+  return (data ?? []).reduce((sum, r) => sum + Number(r.amount), 0)
+}
+
+async function getNextNumber(supabase: SupabaseClient): Promise<string> {
+  const { count } = await supabase
+    .from('invoices')
+    .select('id', { count: 'exact', head: true })
+  const next = String((count ?? 0) + 1).padStart(3, '0')
+  return `INV-${next}`
+}
+
 export const invoicesDb = {
   getAll,
   getRecent,
   getById,
   getStats,
+  getOutstanding,
+  getMonthlyPaid,
+  getNextNumber,
   create,
   update,
   remove,
