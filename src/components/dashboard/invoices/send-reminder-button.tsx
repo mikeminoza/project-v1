@@ -64,7 +64,7 @@ export function SendReminderButton({
       <button
         onClick={handleSend}
         disabled={state === 'loading'}
-        className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-default items-center gap-2 rounded px-2 py-1.5 text-sm transition-colors outline-none disabled:pointer-events-none disabled:opacity-50"
+        className="focus:bg-accent focus:text-accent-foreground hover:bg-accent hover:text-accent-foreground relative flex w-full cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none select-none disabled:pointer-events-none disabled:opacity-50"
       >
         {icon}
         {label}
@@ -92,13 +92,15 @@ export function SendReminderButton({
         ) : (
           <Bell className="h-4 w-4" />
         )}
-        {state === 'loading'
-          ? 'Sending…'
-          : state === 'sent'
-            ? 'Reminder sent!'
-            : state === 'error'
-              ? 'Failed'
-              : 'Send reminder'}
+        <span className="hidden sm:inline">
+          {state === 'loading'
+            ? 'Sending…'
+            : state === 'sent'
+              ? 'Reminder sent!'
+              : state === 'error'
+                ? 'Failed'
+                : 'Send reminder'}
+        </span>
       </Button>
       {state === 'error' && errorMsg && (
         <p className="text-destructive text-xs">{errorMsg}</p>

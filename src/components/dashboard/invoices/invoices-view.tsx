@@ -169,33 +169,33 @@ export function InvoicesView({ invoices }: InvoicesViewProps) {
                         {initials}
                       </div>
 
-                      {/* Client info */}
+                      {/* Client info + amount */}
                       <div className="min-w-0 flex-1">
-                        <p className="text-foreground truncate leading-tight font-medium">
-                          {invoice.client.name}
-                        </p>
+                        <div className="flex items-baseline gap-2">
+                          <p className="text-foreground flex-1 truncate leading-tight font-medium">
+                            {invoice.client.name}
+                          </p>
+                          <span className="text-foreground flex-shrink-0 text-sm font-semibold tabular-nums">
+                            {formatAmount(invoice.amount, invoice.currency)}
+                          </span>
+                        </div>
                         {invoice.client.company && (
                           <p className="text-muted-foreground truncate text-xs">
                             {invoice.client.company}
                           </p>
                         )}
-                        <p className="text-muted-foreground mt-1 text-xs">
-                          <span className="whitespace-nowrap">
+                        <div className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                          <span className="text-muted-foreground text-xs whitespace-nowrap">
                             {invoice.number}
                           </span>
-                          <span className="mx-1.5">·</span>
-                          <span className="whitespace-nowrap">
+                          <span className="text-muted-foreground text-xs">
+                            ·
+                          </span>
+                          <span className="text-muted-foreground text-xs whitespace-nowrap">
                             Due {formatDueDate(invoice.due_date)}
                           </span>
-                        </p>
-                      </div>
-
-                      {/* Amount + badge */}
-                      <div className="flex flex-shrink-0 flex-col items-end gap-1.5">
-                        <span className="text-foreground font-semibold tabular-nums">
-                          {formatAmount(invoice.amount, invoice.currency)}
-                        </span>
-                        <ToneBadge invoice={invoice} />
+                          <ToneBadge invoice={invoice} />
+                        </div>
                       </div>
 
                       {/* Actions — stop propagation so the card click doesn't fire */}

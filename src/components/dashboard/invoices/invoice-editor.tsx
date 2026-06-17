@@ -317,23 +317,24 @@ export function InvoiceEditor({
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden">
       {/* Sticky header */}
       <header className="border-border flex flex-shrink-0 items-center justify-between border-b px-4 py-3">
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <Button
             variant="ghost"
             size="icon"
+            className="flex-shrink-0"
             onClick={() => router.push('/dashboard/invoices')}
             aria-label="Back to invoices"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <span className="text-foreground font-semibold">
+          <span className="text-foreground truncate font-semibold">
             {isEdit ? `Edit ${invoice.number}` : 'New invoice'}
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-shrink-0 items-center gap-2">
           {/* Preview toggle — mobile only */}
           <Button
             variant="outline"
@@ -369,7 +370,10 @@ export function InvoiceEditor({
           </Button>
           <Button type="submit" form="invoice-form" disabled={isLoading}>
             {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-            {isEdit ? 'Save changes' : 'Create invoice'}
+            <span className="sm:hidden">{isEdit ? 'Save' : 'Create'}</span>
+            <span className="hidden sm:inline">
+              {isEdit ? 'Save changes' : 'Create invoice'}
+            </span>
           </Button>
         </div>
       </header>
@@ -585,21 +589,27 @@ export function InvoiceEditor({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label>Line items</Label>
-                {/* Currency selector */}
                 <Controller
                   name="currency"
                   control={control}
                   render={({ field }) => (
-                    <select
-                      {...field}
-                      className="bg-muted/60 border-input text-muted-foreground hover:text-foreground rounded-md border px-2 py-1 text-xs transition-colors outline-none"
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      modal={false}
+                      items={Object.fromEntries(CURRENCIES.map((c) => [c, c]))}
                     >
-                      {CURRENCIES.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger className="h-8 w-24 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CURRENCIES.map((c) => (
+                          <SelectItem key={c} value={c}>
+                            {c}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   )}
                 />
               </div>
