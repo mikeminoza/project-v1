@@ -20,6 +20,7 @@ type InvoicePayload = Pick<
   | 'notes'
   | 'payment_details'
   | 'logo_url'
+  | 'auto_reminder'
 >
 
 export interface InvoiceStats {

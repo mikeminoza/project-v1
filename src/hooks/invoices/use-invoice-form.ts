@@ -65,6 +65,7 @@ export function useInvoiceForm({
       notes: invoice?.notes ?? '',
       payment_details: invoice?.payment_details ?? defaultPaymentDetails ?? '',
       logo_url: invoice?.logo_url ?? '',
+      auto_reminder: invoice?.auto_reminder ?? true,
     },
   })
 
@@ -90,6 +91,7 @@ export function useInvoiceForm({
       notes: data.notes || null,
       payment_details: data.payment_details || null,
       logo_url: data.logo_url || null,
+      auto_reminder: data.auto_reminder,
     }
 
     try {

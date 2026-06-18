@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 import { ToneBadge } from './tone-badge'
 import { SendReminderButton } from './send-reminder-button'
 import type { Client, InvoiceWithClient, UserProfile } from '@/types'
@@ -162,6 +163,7 @@ export function InvoiceEditor({
     id: invoice?.id ?? '',
     user_id: invoice?.user_id ?? '',
     portal_token: invoice?.portal_token ?? '',
+    auto_reminder: invoice?.auto_reminder ?? true,
     created_at: invoice?.created_at ?? '',
     updated_at: invoice?.updated_at ?? '',
     amount: total,
@@ -509,6 +511,45 @@ export function InvoiceEditor({
                   )}
                 />
               </div>
+
+              {/* Auto-reminder toggle */}
+              <Controller
+                name="auto_reminder"
+                control={control}
+                render={({ field }) => (
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <Label
+                        htmlFor="auto_reminder"
+                        className="cursor-pointer text-sm"
+                      >
+                        Auto-reminders
+                      </Label>
+                      <p className="text-muted-foreground text-xs">
+                        Send reminders automatically when overdue
+                      </p>
+                    </div>
+                    <button
+                      id="auto_reminder"
+                      type="button"
+                      role="switch"
+                      aria-checked={field.value}
+                      onClick={() => field.onChange(!field.value)}
+                      className={cn(
+                        'focus-visible:ring-ring/50 relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:ring-2 focus-visible:outline-none',
+                        field.value ? 'bg-foreground' : 'bg-input',
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          'bg-background pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm transition-transform',
+                          field.value ? 'translate-x-4' : 'translate-x-0',
+                        )}
+                      />
+                    </button>
+                  </div>
+                )}
+              />
             </div>
 
             {/* Client */}

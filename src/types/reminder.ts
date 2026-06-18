@@ -6,6 +6,7 @@ export interface Reminder {
   trigger: ReminderTrigger
   days_offset: number
   sent_at: string | null
+  tone_level: string | null
   created_at: string
 }
 

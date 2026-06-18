@@ -1,7 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Reminder, ReminderSettings } from '@/types'
 
-type ReminderPayload = Pick<Reminder, 'invoice_id' | 'trigger' | 'days_offset'>
+type ReminderPayload = Pick<
+  Reminder,
+  'invoice_id' | 'trigger' | 'days_offset'
+> & {
+  tone_level?: string | null
+}
 
 async function getByInvoice(
   supabase: SupabaseClient,

@@ -25,6 +25,7 @@ export interface Invoice {
   payment_details: string | null
   logo_url: string | null
   portal_token: string
+  auto_reminder: boolean
   created_at: string
   updated_at: string
 }

@@ -19,6 +19,7 @@ export const invoiceSchema = z
     notes: z.string().optional(),
     payment_details: z.string().optional(),
     logo_url: z.string().optional(),
+    auto_reminder: z.boolean(),
   })
   .refine((d) => new Date(d.due_date) >= new Date(d.issue_date), {
     message: 'Due date must be on or after the issue date',
