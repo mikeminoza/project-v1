@@ -163,6 +163,19 @@ async function getMonthlyPaid(supabase: SupabaseClient): Promise<number> {
   return (data ?? []).reduce((sum, r) => sum + Number(r.amount), 0)
 }
 
+async function getByClient(
+  supabase: SupabaseClient,
+  clientId: string,
+): Promise<Invoice[]> {
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return (data ?? []) as Invoice[]
+}
+
 async function getMonthlyRevenue(
   supabase: SupabaseClient,
   months = 6,
@@ -257,6 +270,7 @@ export const invoicesDb = {
   getAll,
   getRecent,
   getById,
+  getByClient,
   getByPortalToken,
   getStats,
   getOutstanding,

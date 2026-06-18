@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import {
   Plus,
   Users,
@@ -141,14 +142,17 @@ export function ClientsView({ clients }: ClientsViewProps) {
                         >
                           {/* Name + company */}
                           <td className="px-4 py-3">
-                            <div className="flex items-center gap-3">
+                            <Link
+                              href={`/dashboard/clients/${client.id}`}
+                              className="flex items-center gap-3"
+                            >
                               <div
                                 className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-semibold ${color}`}
                               >
                                 {initials}
                               </div>
                               <div>
-                                <p className="text-foreground font-medium">
+                                <p className="text-foreground hover:text-brand font-medium transition-colors">
                                   {client.name}
                                 </p>
                                 {client.company && (
@@ -157,7 +161,7 @@ export function ClientsView({ clients }: ClientsViewProps) {
                                   </p>
                                 )}
                               </div>
-                            </div>
+                            </Link>
                           </td>
 
                           <td className="text-muted-foreground hidden px-4 py-3 md:table-cell">
