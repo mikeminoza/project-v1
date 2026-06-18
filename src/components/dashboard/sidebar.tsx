@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
   Menu,
+  BarChart3,
 } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 import { Logo } from '@/components/ui/logo'
@@ -28,6 +29,7 @@ const navItems = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
   { href: '/dashboard/invoices', label: 'Invoices', icon: FileText },
   { href: '/dashboard/clients', label: 'Clients', icon: Users },
+  { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ]
 

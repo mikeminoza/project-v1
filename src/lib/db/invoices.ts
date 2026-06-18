@@ -30,6 +30,12 @@ export interface InvoiceStats {
   overdue: number
 }
 
+export interface MonthlyRevenue {
+  month: string
+  key: string
+  paid: number
+}
+
 async function getAll(
   supabase: SupabaseClient,
   filters?: { status?: InvoiceStatus },
@@ -157,6 +163,64 @@ async function getMonthlyPaid(supabase: SupabaseClient): Promise<number> {
   return (data ?? []).reduce((sum, r) => sum + Number(r.amount), 0)
 }
 
+async function getMonthlyRevenue(
+  supabase: SupabaseClient,
+  months = 6,
+): Promise<MonthlyRevenue[]> {
+  const cutoff = new Date()
+  cutoff.setMonth(cutoff.getMonth() - (months - 1))
+  cutoff.setDate(1)
+  cutoff.setHours(0, 0, 0, 0)
+
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('amount, updated_at')
+    .eq('status', 'paid')
+    .gte('updated_at', cutoff.toISOString())
+
+  if (error) throw error
+
+  const map: Record<string, number> = {}
+  for (let i = months - 1; i >= 0; i--) {
+    const d = new Date()
+    d.setMonth(d.getMonth() - i)
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+    map[key] = 0
+  }
+
+  for (const row of data ?? []) {
+    const d = new Date(row.updated_at)
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+    if (key in map) map[key] = (map[key] ?? 0) + Number(row.amount)
+  }
+
+  return Object.entries(map)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, paid]) => {
+      const [year, month] = key.split('-')
+      const label = new Date(
+        Number(year),
+        Number(month) - 1,
+      ).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+      return { month: label, key, paid }
+    })
+}
+
+async function getOverdueInvoices(
+  supabase: SupabaseClient,
+): Promise<InvoiceWithClient[]> {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*, client:clients(id, name, email, company)')
+    .in('status', ['pending', 'overdue'])
+    .lt('due_date', today.toISOString().split('T')[0])
+    .order('due_date', { ascending: true })
+  if (error) throw error
+  return (data ?? []) as InvoiceWithClient[]
+}
+
 async function getNextNumber(supabase: SupabaseClient): Promise<string> {
   const { count } = await supabase
     .from('invoices')
@@ -197,6 +261,8 @@ export const invoicesDb = {
   getStats,
   getOutstanding,
   getMonthlyPaid,
+  getMonthlyRevenue,
+  getOverdueInvoices,
   getNextNumber,
   create,
   update,
