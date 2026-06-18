@@ -190,6 +190,10 @@ export function InvoiceEditor({
   }
 
   function handleDownload() {
+    if (isEdit && invoice) {
+      window.location.href = `/api/invoices/${invoice.id}/pdf`
+      return
+    }
     const lineItemRows = lineItems
       .map(
         (item) => `
