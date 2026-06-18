@@ -9,6 +9,7 @@ import {
   EyeOff,
   ImagePlus,
   Loader2,
+  MousePointerClick,
   Plus,
   Trash2,
   X,
@@ -78,6 +79,8 @@ export interface InvoiceEditorProps {
   userName?: string
   userProfile?: UserProfile | null
   lastReminderSentAt?: string | null
+  lastReminderOpenedAt?: string | null
+  lastReminderClickedAt?: string | null
 }
 
 export function InvoiceEditor({
@@ -88,6 +91,8 @@ export function InvoiceEditor({
   userName,
   userProfile,
   lastReminderSentAt,
+  lastReminderOpenedAt,
+  lastReminderClickedAt,
 }: InvoiceEditorProps) {
   const router = useRouter()
   const isEdit = !!invoice
@@ -394,6 +399,17 @@ export function InvoiceEditor({
               addSuffix: true,
             })}
           </span>
+          {lastReminderClickedAt ? (
+            <span className="ml-1 flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+              <MousePointerClick className="h-3 w-3" />
+              Clicked
+            </span>
+          ) : lastReminderOpenedAt ? (
+            <span className="ml-1 flex items-center gap-1 text-blue-600 dark:text-blue-400">
+              <Eye className="h-3 w-3" />
+              Opened
+            </span>
+          ) : null}
         </div>
       )}
 
@@ -515,46 +531,46 @@ export function InvoiceEditor({
                   )}
                 />
               </div>
-
-              {/* Auto-reminder toggle */}
-              <Controller
-                name="auto_reminder"
-                control={control}
-                render={({ field }) => (
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <Label
-                        htmlFor="auto_reminder"
-                        className="cursor-pointer text-sm"
-                      >
-                        Auto-reminders
-                      </Label>
-                      <p className="text-muted-foreground text-xs">
-                        Send reminders automatically when overdue
-                      </p>
-                    </div>
-                    <button
-                      id="auto_reminder"
-                      type="button"
-                      role="switch"
-                      aria-checked={field.value}
-                      onClick={() => field.onChange(!field.value)}
-                      className={cn(
-                        'focus-visible:ring-ring/50 relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:ring-2 focus-visible:outline-none',
-                        field.value ? 'bg-foreground' : 'bg-input',
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          'bg-background pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm transition-transform',
-                          field.value ? 'translate-x-4' : 'translate-x-0',
-                        )}
-                      />
-                    </button>
-                  </div>
-                )}
-              />
             </div>
+
+            {/* Auto-reminder toggle */}
+            <Controller
+              name="auto_reminder"
+              control={control}
+              render={({ field }) => (
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <Label
+                      htmlFor="auto_reminder"
+                      className="cursor-pointer text-sm"
+                    >
+                      Auto-reminders
+                    </Label>
+                    <p className="text-muted-foreground text-xs">
+                      Auto-send emails when overdue
+                    </p>
+                  </div>
+                  <button
+                    id="auto_reminder"
+                    type="button"
+                    role="switch"
+                    aria-checked={field.value}
+                    onClick={() => field.onChange(!field.value)}
+                    className={cn(
+                      'focus-visible:ring-ring/50 relative mt-0.5 inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:ring-2 focus-visible:outline-none',
+                      field.value ? 'bg-foreground' : 'bg-input',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'bg-background pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm transition-transform',
+                        field.value ? 'translate-x-4' : 'translate-x-0',
+                      )}
+                    />
+                  </button>
+                </div>
+              )}
+            />
 
             {/* Client */}
             <div className="space-y-1.5">

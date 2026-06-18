@@ -30,7 +30,7 @@ export async function sendInvoiceReminder(params: {
   senderEmail: string
   emailTemplates: EmailTemplates
   appUrl: string
-}): Promise<{ success: boolean; error?: string }> {
+}): Promise<{ success: boolean; emailId?: string; error?: string }> {
   const { invoice, senderName, senderEmail, emailTemplates, appUrl } = params
   const tone = getEscalationTone(invoice)
 
@@ -78,7 +78,7 @@ export async function sendInvoiceReminder(params: {
     portalUrl,
   })
 
-  const { error } = await resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: 'Invoq <onboarding@resend.dev>',
     to: invoice.client.email,
     replyTo: senderEmail || undefined,
@@ -87,5 +87,5 @@ export async function sendInvoiceReminder(params: {
   })
 
   if (error) return { success: false, error: error.message }
-  return { success: true }
+  return { success: true, emailId: data?.id }
 }

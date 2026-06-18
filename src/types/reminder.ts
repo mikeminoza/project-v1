@@ -7,6 +7,9 @@ export interface Reminder {
   days_offset: number
   sent_at: string | null
   tone_level: string | null
+  resend_email_id: string | null
+  opened_at: string | null
+  clicked_at: string | null
   created_at: string
 }
 

@@ -6,6 +6,7 @@ type ReminderPayload = Pick<
   'invoice_id' | 'trigger' | 'days_offset'
 > & {
   tone_level?: string | null
+  resend_email_id?: string | null
 }
 
 async function getByInvoice(
@@ -77,6 +78,40 @@ async function markSent(
   return data as Reminder
 }
 
+async function getByResendEmailId(
+  supabase: SupabaseClient,
+  resendEmailId: string,
+): Promise<Reminder | null> {
+  const { data, error } = await supabase
+    .from('reminders')
+    .select('*')
+    .eq('resend_email_id', resendEmailId)
+    .maybeSingle()
+  if (error) throw error
+  return data as Reminder | null
+}
+
+async function markOpened(supabase: SupabaseClient, id: string): Promise<void> {
+  const { error } = await supabase
+    .from('reminders')
+    .update({ opened_at: new Date().toISOString() })
+    .eq('id', id)
+    .is('opened_at', null)
+  if (error) throw error
+}
+
+async function markClicked(
+  supabase: SupabaseClient,
+  id: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from('reminders')
+    .update({ clicked_at: new Date().toISOString() })
+    .eq('id', id)
+    .is('clicked_at', null)
+  if (error) throw error
+}
+
 async function remove(supabase: SupabaseClient, id: string): Promise<void> {
   const { error } = await supabase.from('reminders').delete().eq('id', id)
   if (error) throw error
@@ -113,9 +148,12 @@ async function updateSettings(
 export const remindersDb = {
   getByInvoice,
   getLastByInvoice,
+  getByResendEmailId,
   create,
   createSent,
   markSent,
+  markOpened,
+  markClicked,
   remove,
   getSettings,
   updateSettings,

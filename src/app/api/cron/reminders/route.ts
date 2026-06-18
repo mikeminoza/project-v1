@@ -105,6 +105,7 @@ async function runAutoReminders() {
         days_offset: tone.daysOverdue,
         sent_at: new Date().toISOString(),
         tone_level: tone.level,
+        resend_email_id: result.emailId ?? null,
       })
 
       sent++

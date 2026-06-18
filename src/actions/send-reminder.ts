@@ -57,6 +57,7 @@ export async function sendReminderAction(
       trigger,
       days_offset: tone.daysOverdue,
       tone_level: tone.level,
+      resend_email_id: result.emailId ?? null,
     })
 
     return { success: true }

@@ -38,6 +38,8 @@ export default async function EditInvoicePage({
       userName={user.user_metadata?.full_name as string | undefined}
       userProfile={profile}
       lastReminderSentAt={lastReminder?.sent_at ?? null}
+      lastReminderOpenedAt={lastReminder?.opened_at ?? null}
+      lastReminderClickedAt={lastReminder?.clicked_at ?? null}
     />
   )
 }
