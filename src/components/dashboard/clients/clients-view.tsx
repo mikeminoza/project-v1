@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   Plus,
   Users,
@@ -39,6 +40,7 @@ export function ClientsView({ clients }: ClientsViewProps) {
     client?: Client
   }>({ open: false })
 
+  const router = useRouter()
   const filtered = clients.filter((c) => {
     const q = search.toLowerCase()
     return (
@@ -138,7 +140,10 @@ export function ClientsView({ clients }: ClientsViewProps) {
                       return (
                         <tr
                           key={client.id}
-                          className="hover:bg-muted/40 transition-colors"
+                          className="hover:bg-muted/40 cursor-pointer transition-colors"
+                          onClick={() =>
+                            router.push(`/dashboard/clients/${client.id}`)
+                          }
                         >
                           {/* Name + company */}
                           <td className="px-4 py-3">
@@ -173,7 +178,10 @@ export function ClientsView({ clients }: ClientsViewProps) {
                           </td>
 
                           {/* Actions */}
-                          <td className="px-4 py-3">
+                          <td
+                            className="px-4 py-3"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <div className="flex justify-end">
                               <DropdownMenu>
                                 <DropdownMenuTrigger
