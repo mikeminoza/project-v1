@@ -327,7 +327,7 @@ export function renderPaymentNotificationEmail(data: {
   invoiceUrl: string
 }): { subject: string; html: string } {
   const { clientName, invoiceNumber, amount, currency, invoiceUrl } = data
-  const subject = `Payment confirmed — ${invoiceNumber}`
+  const subject = `Payment claimed — ${invoiceNumber}`
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><title>${subject}</title></head>
@@ -336,15 +336,15 @@ export function renderPaymentNotificationEmail(data: {
     <tr>
       <td align="center">
         <table width="520" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
-          <tr><td style="height:4px;background:#10b981;font-size:0;">&nbsp;</td></tr>
+          <tr><td style="height:4px;background:#f59e0b;font-size:0;">&nbsp;</td></tr>
           <tr>
             <td style="padding:36px 40px 28px;">
-              <p style="margin:0 0 16px;font-size:24px;">&#10003;</p>
-              <p style="margin:0 0 8px;font-size:18px;font-weight:700;color:#111827;">Payment confirmed</p>
+              <p style="margin:0 0 16px;font-size:24px;">&#128337;</p>
+              <p style="margin:0 0 8px;font-size:18px;font-weight:700;color:#111827;">Payment claimed</p>
               <p style="margin:0;font-size:15px;color:#374151;line-height:1.6;">
-                <strong>${clientName}</strong> has marked invoice
-                <strong>${invoiceNumber}</strong> (${fmtCurrency(amount, currency)}) as paid.
-                Log in to verify receipt and update your records if needed.
+                <strong>${clientName}</strong> says they have sent payment for invoice
+                <strong>${invoiceNumber}</strong> (${fmtCurrency(amount, currency)}).
+                Please verify the funds have arrived, then mark the invoice as paid in your dashboard.
               </p>
             </td>
           </tr>

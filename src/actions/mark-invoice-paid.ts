@@ -20,11 +20,6 @@ export async function markInvoicePaidAction(
     if (invoice.status === 'draft')
       return { success: false, error: 'Invoice is not yet finalized' }
 
-    await supabase
-      .from('invoices')
-      .update({ status: 'paid' })
-      .eq('portal_token', portalToken)
-
     const freelancerEmail = invoice.profile?.email
     if (freelancerEmail) {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ''
