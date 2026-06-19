@@ -20,7 +20,7 @@ export function Logo({ size }: { size?: number }) {
     <Link href="/" className="flex items-center gap-2 font-bold tracking-tight">
       <InvozeIcon size={size} />
       <span>
-        Invo<span className="text-brand">q</span>
+        Invo<span className="text-brand">ze</span>
       </span>
     </Link>
   )
