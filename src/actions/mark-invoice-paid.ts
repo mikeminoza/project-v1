@@ -1,4 +1,4 @@
-'use server'
+﻿'use server'
 
 import { Resend } from 'resend'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -39,7 +39,7 @@ export async function markInvoicePaidAction(
         invoiceUrl,
       })
       await resend.emails.send({
-        from: 'Invoq <onboarding@resend.dev>',
+        from: 'Invoze <onboarding@resend.dev>',
         to: freelancerEmail,
         subject,
         html,

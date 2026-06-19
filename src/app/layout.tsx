@@ -16,7 +16,7 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Invoq — Stop Chasing Payments',
+  title: 'Invoze — Stop Chasing Payments',
   description:
     'Automated invoice reminders that get results. Stop chasing clients and start getting paid faster.',
 }

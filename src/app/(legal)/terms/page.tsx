@@ -1,7 +1,7 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — Invoq',
+  title: 'Terms of Service — Invoze',
 }
 
 function Section({
@@ -43,7 +43,7 @@ export default function TermsPage() {
 
       <Section title="1. Agreement to Terms">
         <p>
-          By accessing or using Invoq (&ldquo;the Service&rdquo;), you agree to
+          By accessing or using Invoze (&ldquo;the Service&rdquo;), you agree to
           be bound by these Terms of Service (&ldquo;Terms&rdquo;). If you do
           not agree to these Terms, do not use the Service.
         </p>
@@ -55,7 +55,7 @@ export default function TermsPage() {
 
       <Section title="2. Description of Service">
         <p>
-          Invoq is an automated invoice reminder service designed for
+          Invoze is an automated invoice reminder service designed for
           freelancers and small businesses. The Service enables you to send
           automated follow-up emails to clients regarding outstanding invoices.
         </p>
@@ -76,10 +76,10 @@ export default function TermsPage() {
           password and for all activity that occurs under your account. Notify
           us immediately at{' '}
           <a
-            href="mailto:support@invoq.com"
+            href="mailto:support@Invoze.com"
             className="text-foreground underline underline-offset-4"
           >
-            support@invoq.com
+            support@Invoze.com
           </a>{' '}
           if you suspect unauthorised access.
         </p>
@@ -88,7 +88,7 @@ export default function TermsPage() {
 
       <Section title="4. Subscription Plans and Billing">
         <p>
-          Invoq offers free and paid subscription plans. Paid plans are billed
+          Invoze offers free and paid subscription plans. Paid plans are billed
           on a monthly or annual basis, as selected at checkout.
         </p>
         <ul className="list-disc space-y-1.5 pl-5">
@@ -128,10 +128,10 @@ export default function TermsPage() {
           We do not provide refunds for partial billing periods. If you believe
           you were charged in error, contact{' '}
           <a
-            href="mailto:billing@invoq.com"
+            href="mailto:billing@Invoze.com"
             className="text-foreground underline underline-offset-4"
           >
-            billing@invoq.com
+            billing@Invoze.com
           </a>{' '}
           within 14 days of the charge.
         </p>
@@ -168,7 +168,7 @@ export default function TermsPage() {
       <Section title="8. Your Data">
         <p>
           You retain ownership of all data you submit to the Service, including
-          invoice and client data. By using the Service, you grant Invoq a
+          invoice and client data. By using the Service, you grant Invoze a
           limited licence to use that data solely to provide the Service.
         </p>
         <p>
@@ -186,7 +186,7 @@ export default function TermsPage() {
       <Section title="9. Intellectual Property">
         <p>
           The Service, including its design, code, content, and trademarks, is
-          owned by Invoq and protected by intellectual property laws. You may
+          owned by Invoze and protected by intellectual property laws. You may
           not copy, modify, distribute, or reverse-engineer any part of the
           Service without our prior written consent.
         </p>
@@ -208,7 +208,7 @@ export default function TermsPage() {
 
       <Section title="11. Limitation of Liability">
         <p>
-          To the maximum extent permitted by law, Invoq shall not be liable for
+          To the maximum extent permitted by law, Invoze shall not be liable for
           any indirect, incidental, special, consequential, or punitive damages,
           including loss of revenue, loss of data, or business interruption,
           arising from your use of the Service.
@@ -224,7 +224,7 @@ export default function TermsPage() {
         <p>
           These Terms are governed by and construed in accordance with
           applicable law. Any disputes shall be resolved through binding
-          arbitration or in the courts of the jurisdiction where Invoq is
+          arbitration or in the courts of the jurisdiction where Invoze is
           registered.
         </p>
       </Section>
@@ -242,10 +242,10 @@ export default function TermsPage() {
         <p>If you have questions about these Terms, please contact us at:</p>
         <p>
           <a
-            href="mailto:legal@invoq.com"
+            href="mailto:legal@Invoze.com"
             className="text-foreground underline underline-offset-4"
           >
-            legal@invoq.com
+            legal@Invoze.com
           </a>
         </p>
       </Section>

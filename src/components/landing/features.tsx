@@ -13,7 +13,7 @@ const features = [
     icon: Bell,
     title: 'Automated Reminders',
     description:
-      'Set it once and Invoq sends perfectly-timed reminders for every invoice — no manual follow-up needed.',
+      'Set it once and Invoze sends perfectly-timed reminders for every invoice — no manual follow-up needed.',
   },
   {
     icon: TrendingUp,
@@ -59,7 +59,7 @@ export function Features() {
             Everything you need to get paid faster
           </h2>
           <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-lg">
-            Invoq handles the entire follow-up process so you can focus on your
+            Invoze handles the entire follow-up process so you can focus on your
             actual work.
           </p>
         </FadeUp>

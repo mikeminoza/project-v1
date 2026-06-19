@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import { ArrowRight, Eye, EyeOff } from 'lucide-react'
@@ -35,7 +35,7 @@ export default function SignInPage() {
           Welcome back
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
-          Sign in to your Invoq account.
+          Sign in to your Invoze account.
         </p>
       </div>
 

@@ -1,7 +1,7 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Invoq',
+  title: 'Privacy Policy — Invoze',
 }
 
 function Section({
@@ -43,14 +43,14 @@ export default function PrivacyPage() {
 
       <Section title="1. Introduction">
         <p>
-          Invoq (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;)
-          operates the Invoq invoice reminder service (the
+          Invoze (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;)
+          operates the Invoze invoice reminder service (the
           &ldquo;Service&rdquo;). This Privacy Policy explains how we collect,
           use, disclose, and safeguard your information when you use our
           Service.
         </p>
         <p>
-          By using Invoq, you agree to the collection and use of information in
+          By using Invoze, you agree to the collection and use of information in
           accordance with this policy. If you do not agree, please do not use
           the Service.
         </p>
@@ -130,7 +130,7 @@ export default function PrivacyPage() {
             <strong className="text-foreground font-medium">
               Business transfers:
             </strong>{' '}
-            If Invoq is acquired or merges with another company, your data may
+            If Invoze is acquired or merges with another company, your data may
             be transferred. We will notify you before any such transfer.
           </li>
         </ul>
@@ -158,10 +158,10 @@ export default function PrivacyPage() {
         <p>
           If you discover a security vulnerability, please report it to{' '}
           <a
-            href="mailto:security@invoq.com"
+            href="mailto:security@Invoze.com"
             className="text-foreground underline underline-offset-4"
           >
-            security@invoq.com
+            security@Invoze.com
           </a>
           .
         </p>
@@ -199,10 +199,10 @@ export default function PrivacyPage() {
         <p>
           To exercise any of these rights, email us at{' '}
           <a
-            href="mailto:privacy@invoq.com"
+            href="mailto:privacy@Invoze.com"
             className="text-foreground underline underline-offset-4"
           >
-            privacy@invoq.com
+            privacy@Invoze.com
           </a>
           . We will respond within 30 days.
         </p>
@@ -245,10 +245,10 @@ export default function PrivacyPage() {
         </p>
         <p>
           <a
-            href="mailto:privacy@invoq.com"
+            href="mailto:privacy@Invoze.com"
             className="text-foreground underline underline-offset-4"
           >
-            privacy@invoq.com
+            privacy@Invoze.com
           </a>
         </p>
       </Section>

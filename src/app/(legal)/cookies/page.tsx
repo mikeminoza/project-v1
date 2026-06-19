@@ -1,7 +1,7 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy — Invoq',
+  title: 'Cookie Policy — Invoze',
 }
 
 function Section({
@@ -156,10 +156,10 @@ export default function CookiesPage() {
         <p>
           If you have questions about our use of cookies, contact us at{' '}
           <a
-            href="mailto:privacy@invoq.com"
+            href="mailto:privacy@Invoze.com"
             className="text-foreground underline underline-offset-4"
           >
-            privacy@invoq.com
+            privacy@Invoze.com
           </a>
           .
         </p>

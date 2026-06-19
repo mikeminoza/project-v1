@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getEscalationTone } from '@/lib/escalation'
 import { sendInvoiceReminder } from '@/lib/reminder-mailer'
@@ -80,7 +80,7 @@ async function runAutoReminders() {
 
       const result = await sendInvoiceReminder({
         invoice,
-        senderName: profile?.full_name || profile?.email || 'Invoq',
+        senderName: profile?.full_name || profile?.email || 'Invoze',
         senderEmail: profile?.email ?? '',
         emailTemplates: (profile?.email_templates as EmailTemplates) ?? {},
         appUrl,

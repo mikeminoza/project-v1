@@ -1,15 +1,19 @@
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { invoicesDb } from '@/lib/db'
+import { stripeEnabled } from '@/lib/stripe'
 import { fmtCurrency, fmtDate } from '@/lib/email'
 import { MarkPaidButton } from './mark-paid-button'
+import { StripePayButton } from './stripe-pay-button'
 
 export default async function PayPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ token: string }>
+  searchParams: Promise<{ paid?: string }>
 }) {
-  const { token } = await params
+  const [{ token }, { paid }] = await Promise.all([params, searchParams])
   const supabase = createAdminClient()
   const invoice = await invoicesDb.getByPortalToken(supabase, token)
   if (!invoice) notFound()
@@ -19,7 +23,7 @@ export default async function PayPage({
   const logoUrl = invoice.logo_url || profile?.logo_url
   const paymentDetails =
     invoice.payment_details || profile?.default_payment_details
-  const isPaid = invoice.status === 'paid'
+  const isPaid = invoice.status === 'paid' || paid === '1'
   const isDraft = invoice.status === 'draft'
   const isActionable =
     invoice.status === 'pending' || invoice.status === 'overdue'
@@ -218,17 +222,34 @@ export default async function PayPage({
                 </p>
               </div>
             ) : isActionable ? (
-              <MarkPaidButton
-                portalToken={invoice.portal_token}
-                businessName={businessName}
-              />
+              <div className="flex flex-col gap-3">
+                {stripeEnabled ? (
+                  <>
+                    <StripePayButton portalToken={invoice.portal_token} />
+                    <div className="flex items-center gap-3">
+                      <hr className="flex-1 border-gray-100" />
+                      <span className="text-xs text-gray-400">or</span>
+                      <hr className="flex-1 border-gray-100" />
+                    </div>
+                    <MarkPaidButton
+                      portalToken={invoice.portal_token}
+                      businessName={businessName}
+                    />
+                  </>
+                ) : (
+                  <MarkPaidButton
+                    portalToken={invoice.portal_token}
+                    businessName={businessName}
+                  />
+                )}
+              </div>
             ) : null}
           </div>
         </div>
 
         {/* Footer */}
         <p className="mt-6 text-center text-xs text-gray-400">
-          Powered by <span className="font-semibold text-gray-500">Invoq</span>
+          Powered by <span className="font-semibold text-gray-500">Invoze</span>
         </p>
       </div>
     </div>

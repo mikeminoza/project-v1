@@ -1,4 +1,4 @@
-import type { EscalationLevel, EscalationTone } from './escalation'
+﻿import type { EscalationLevel, EscalationTone } from './escalation'
 import type { LineItem } from '@/types'
 import type { EmailTemplateLevel } from '@/types/user'
 import { format, parseISO } from 'date-fns'
@@ -306,7 +306,7 @@ export function renderReminderEmail(data: ReminderEmailData): string {
           <tr>
             <td style="padding:20px 40px;background:#f9fafb;border-top:1px solid #e5e7eb;">
               <p style="margin:0;font-size:12px;color:#9ca3af;">
-                Sent by <strong style="color:#6b7280;">${senderName}</strong> · Powered by Invoq
+                Sent by <strong style="color:#6b7280;">${senderName}</strong> · Powered by Invoze
               </p>
             </td>
           </tr>
@@ -357,7 +357,7 @@ export function renderPaymentNotificationEmail(data: {
           </tr>
           <tr>
             <td style="padding:16px 40px;background:#f9fafb;border-top:1px solid #e5e7eb;">
-              <p style="margin:0;font-size:12px;color:#9ca3af;">Powered by Invoq</p>
+              <p style="margin:0;font-size:12px;color:#9ca3af;">Powered by Invoze</p>
             </td>
           </tr>
         </table>

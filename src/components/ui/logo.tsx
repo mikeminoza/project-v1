@@ -1,6 +1,6 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
-function InvoqIcon({ size = 24 }: { size?: number }) {
+function InvozeIcon({ size = 24 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -18,7 +18,7 @@ function InvoqIcon({ size = 24 }: { size?: number }) {
 export function Logo({ size }: { size?: number }) {
   return (
     <Link href="/" className="flex items-center gap-2 font-bold tracking-tight">
-      <InvoqIcon size={size} />
+      <InvozeIcon size={size} />
       <span>
         Invo<span className="text-brand">q</span>
       </span>

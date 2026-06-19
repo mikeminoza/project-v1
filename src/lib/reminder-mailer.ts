@@ -1,4 +1,4 @@
-import { Resend } from 'resend'
+﻿import { Resend } from 'resend'
 import type {
   InvoiceWithClient,
   EmailTemplates,
@@ -79,7 +79,7 @@ export async function sendInvoiceReminder(params: {
   })
 
   const { data, error } = await resend.emails.send({
-    from: 'Invoq <onboarding@resend.dev>',
+    from: 'Invoze <onboarding@resend.dev>',
     to: invoice.client.email,
     replyTo: senderEmail || undefined,
     subject: emailSubject,

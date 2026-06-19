@@ -25,7 +25,7 @@ export function Hero() {
             </FadeIn>
             <FadeIn delay={0.2}>
               <p className="text-muted-foreground max-w-md text-lg leading-relaxed">
-                Invoq sends automated invoice reminders so you never have to
+                Invoze sends automated invoice reminders so you never have to
                 write another awkward follow-up email. Polite first, firm when
                 needed.
               </p>

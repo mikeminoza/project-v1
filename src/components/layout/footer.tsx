@@ -78,7 +78,7 @@ export function Footer() {
           </div>
         </div>
         <div className="text-muted-foreground mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 text-sm sm:flex-row">
-          <p>© 2026 Invoq. All rights reserved.</p>
+          <p>© 2026 Invoze. All rights reserved.</p>
           <p>Built for freelancers, by freelancers.</p>
         </div>
       </div>
